@@ -711,3 +711,244 @@ section {
         bottom: 2rem;
     }
 }
+
+/* Contact Form Section */
+.contact-form-section {
+    background: white;
+    padding: 5rem 0;
+    width: 100vw;
+    max-width: 100%;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow-x: hidden;
+}
+
+.form-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #e8f0f8;
+    padding: 2.5rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-section-label {
+    font-weight: 600;
+    color: #172a5c;
+    font-size: 1.0625rem;
+}
+
+.required {
+    color: #ef4444;
+    margin-left: 0.25rem;
+}
+
+/* Checkbox Grid */
+.checkbox-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+}
+
+.form-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    padding: 0.875rem 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.form-checkbox-item:hover {
+    background-color: #f3f4f6;
+}
+
+.form-checkbox-item input[type="checkbox"]:checked + span {
+    font-weight: 600;
+    color: #172a5c;
+}
+
+.form-checkbox-item:has(input:checked) {
+    background-color: rgba(92, 200, 208, 0.15);
+    border-color: #5cc8d0;
+}
+
+.form-checkbox-item input[type="checkbox"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    cursor: pointer;
+    accent-color: #5cc8d0;
+    flex-shrink: 0;
+}
+
+.form-checkbox-item span {
+    color: #4b5563;
+    font-size: 0.9375rem;
+}
+
+/* Form Input */
+.form-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: 'Nanum Gothic', sans-serif;
+    transition: all 0.2s;
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #5cc8d0;
+    box-shadow: 0 0 0 3px rgba(92, 200, 208, 0.1);
+}
+
+.form-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Radio Group */
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    padding: 0.875rem 1.5rem;
+    background: white;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.form-radio-item:hover {
+    background-color: #f3f4f6;
+}
+
+.form-radio-item:has(input:checked) {
+    background-color: rgba(92, 200, 208, 0.15);
+    border-color: #5cc8d0;
+}
+
+.form-radio-item input[type="radio"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    cursor: pointer;
+    accent-color: #5cc8d0;
+}
+
+.form-radio-item input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: #172a5c;
+}
+
+.form-radio-item span {
+    color: #4b5563;
+    font-size: 0.9375rem;
+}
+
+/* Privacy Box */
+.privacy-box {
+    background: white;
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.privacy-text {
+    color: #6b7280;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.agreement-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    background: white;
+    border-radius: 0.5rem;
+}
+
+.agreement-checkbox input[type="checkbox"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    cursor: pointer;
+    accent-color: #5cc8d0;
+}
+
+.agreement-checkbox span {
+    color: #172a5c;
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    background: #172a5c;
+    color: white;
+    padding: 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(23, 42, 92, 0.3);
+    margin-top: 1rem;
+}
+
+.submit-button:hover {
+    background: #0f1f45;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 20px -3px rgba(23, 42, 92, 0.4);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+@media (min-width: 640px) {
+    .checkbox-grid-2col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .contact-form-section {
+        padding: 8rem 0;
+    }
+
+    .form-wrapper {
+        padding: 3.5rem 3rem;
+    }
+}
