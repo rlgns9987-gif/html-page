@@ -354,7 +354,6 @@ section {
 }
 
 /* Reviews Section */
-
 .reviews-section {
     background: white;
     padding: 5rem 0;
@@ -365,25 +364,35 @@ section {
     overflow-x: hidden;
 }
 
-.reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 1.5rem;
+.reviews-slider-wrapper {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3rem;
+}
+
+.reviews-slider {
+    overflow: hidden;
+}
+
+.reviews-track {
+    display: flex;
+    transition: transform 0.4s ease;
 }
 
 .review-card {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+}
+
+.review-card > div:first-child {
     background: #fff;
     border-radius: 1rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
     border: 1px solid #e5e7eb;
-    width:85%;
-    margin:0 auto;
-}
-
-.review-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
 }
 
 .review-image {
@@ -461,20 +470,73 @@ section {
     content: ' : ';
 }
 
-@media (min-width: 640px) {
-    .reviews-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* 슬라이더 버튼 */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: #172a5c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+}
+
+.slider-btn:hover {
+    background: #5cc8d0;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-prev {
+    left: 0;
+}
+
+.slider-next {
+    right: 0;
+}
+
+/* 모바일: 1개씩 */
+@media (max-width: 767px) {
+    .review-card {
+        width: 100%;
+    }
+
+    .reviews-slider-wrapper {
+        padding: 0 2.5rem;
+    }
+
+    .slider-btn {
+        width: 2.5rem;
+        height: 2.5rem;
     }
 }
 
+/* PC: 3열 2행 = 6개 */
 @media (min-width: 768px) {
     .reviews-section {
         padding: 8rem 0;
     }
 
-    .reviews-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.75rem;
+    .reviews-track {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .review-card {
+        width: calc(100% / 3);
+        padding: 0.75rem;
+    }
+
+    .reviews-slider-wrapper {
+        padding: 0 4rem;
     }
 
     .review-body {
@@ -928,7 +990,7 @@ section {
     align-items: center;
     gap: 0.625rem;
     cursor: pointer;
-    padding: 0.875rem 1.5rem;
+    padding: 0.875rem 0.8rem;
     background: white;
     border-radius: 0.5rem;
     transition: all 0.2s;
