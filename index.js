@@ -280,4 +280,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initScroller();
 
+    // ==========================================================
+    // 5. [추가] 버튼 클릭 이벤트 (스크롤 이동 & 문의 링크)
+    // ==========================================================
+    
+    // 1) "1:1 무료 상담 받기" 버튼 클릭 시 -> 상담 폼으로 부드럽게 스크롤 이동
+    const ctaBtn = document.querySelector('.hero-cta');
+    const contactSection = document.querySelector('.contact-form-section');
+
+    if (ctaBtn && contactSection) {
+        ctaBtn.addEventListener('click', function() {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
+    // 2) 우측 하단 "문의" 버튼 클릭 시 -> 카카오톡 채팅방 새 창으로 열기
+    const floatingInquiryBtn = document.querySelector('.floating-inquiry');
+
+    if (floatingInquiryBtn) {
+        floatingInquiryBtn.addEventListener('click', function() {
+            window.open('http://pf.kakao.com/_cxgiAX/chat', '_blank');
+        });
+    }
+
 });
