@@ -183,6 +183,14 @@ section {
     margin-bottom: 0.5rem;
     letter-spacing: -1px;
     line-height: 1;
+
+    /* [수정] 자릿수 변경 시 영역 고정 및 떨림 방지 */
+    display: inline-block;       /* 너비(width) 값을 적용하기 위해 필수 */
+    min-width: 5em;              /* 4자리 숫자+단위가 들어갈 공간 미리 확보 (글자 크기 비례) */
+    text-align: center;          /* 확보된 공간 안에서 숫자는 가운데 정렬 */
+    font-variant-numeric: tabular-nums; /* 숫자의 너비를 일정하게 고정 (1과 8의 너비를 같게) */
+    white-space: nowrap;         /* 줄바꿈 방지 */
+    min-width: 4em; /* PC에선 조금 더 넉넉하게 */
 }
 
 .hero-stat-label {
@@ -803,4 +811,17 @@ section {
 /* 4. 숫자 카운트 애니메이션 시 숫자 너비 고정 (떨림 방지) */
 .hero-stat-number {
     font-variant-numeric: tabular-nums;
+}
+/* =========================================
+   추가된 스타일 (맨 아래에 붙여넣기)
+   ========================================= */
+
+/* ... (이전 애니메이션 코드는 그대로 유지) ... */
+
+/* [새로 추가] 모바일 무한 슬라이드용 복제 카드 처리 */
+/* PC 화면(768px 이상)에서는 복제된 7번째 카드를 숨김 */
+@media (min-width: 768px) {
+    .review-card.clone-card {
+        display: none !important;
+    }
 }
