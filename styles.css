@@ -813,3 +813,125 @@ section {
         display: none !important;
     }
 }
+/* =========================================
+   [추가] 실시간 상담 현황 (Hero 하단 스크롤)
+   ========================================= */
+
+.hero-live-status {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-top: 1rem; /* 기존 stats 바로 아래 띄우기 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left; /* 내부 텍스트 왼쪽 정렬 */
+}
+
+/* 헤더 (제목 + 빨간점) */
+.live-status-header {
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.8rem;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ff4d4d;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ff4d4d;
+    animation: pulseRed 1.5s infinite;
+}
+
+@keyframes pulseRed {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 스크롤 창 (3개 정도 보이게 높이 설정) */
+.scroller-window {
+    height: 150px; /* 한 줄에 약 50px * 3개 */
+    overflow: hidden;
+    position: relative;
+    /* 위아래 자연스럽게 흐려지는 마스킹 효과 */
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+/* 움직이는 트랙 */
+.scroller-track {
+    animation: scrollUp 20s linear infinite; /* 속도 조절: 20s */
+}
+
+/* 리스트 아이템 스타일 */
+.scroller-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); /* 점선 구분선 */
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    height: 50px; /* 높이 고정 (계산 편하게) */
+    box-sizing: border-box;
+}
+
+.scroller-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.scroller-name {
+    font-weight: bold;
+    color: #f4df11; /* 이름 강조색 */
+    min-width: 45px;
+}
+
+.scroller-detail {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    white-space: nowrap;     /* 줄바꿈 방지 */
+    overflow: hidden;        /* 넘치면 숨김 */
+    text-overflow: ellipsis; /* ... 처리 */
+    max-width: 200px;        /* 모바일 대응 */
+}
+
+.scroller-tag {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #fff;
+    white-space: nowrap;
+    margin-left: 5px;
+}
+
+/* 무한 스크롤 애니메이션 (절반만큼 위로 이동) */
+@keyframes scrollUp {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* 모바일 대응 */
+@media (max-width: 480px) {
+    .scroller-detail {
+        font-size: 0.8rem;
+        max-width: 140px; 
+    }
+    .scroller-info {
+        gap: 0.5rem;
+    }
+}
+@media (min-width:768px) {
+    .hero-live-status {
+        padding: 1.5rem;
+    }
+}

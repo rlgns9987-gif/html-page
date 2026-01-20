@@ -184,4 +184,100 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollObserver.observe(el);
     });
 
+    // ==========================================================
+    // 4. [수정] 실시간 상담 현황 (일일 고정 랜덤 - Seeded Random)
+    // ==========================================================
+    const scrollerTrack = document.querySelector('.scroller-track');
+
+    // 랜덤 데이터 소스
+    const lastNames = ['김', '이', '박', '최', '정', '강', '조', '윤', '장', '임', '한', '오', '서', '신', '권'];
+    const goals = [
+        '사회복지사 2급', '전기공학', '경영학', '심리학', 
+        '컴퓨터공학', '학사편입 준비', '일반편입 준비', '전기기사 응시자격', 
+        '산업기사 응시자격', '대학원 진학', 'CPA 응시자격', '한국어교원'
+    ];
+    const educations = ['고등학교 졸업', '전문대 졸업', '4년제 졸업', '대학 중퇴', '대학 제적'];
+    const methods = ['전화상담', '카카오톡'];
+
+    // 1. 오늘 날짜 시드 생성 (어제와 다른 랜덤 명단을 위해)
+    function getTodaySeed() {
+        const now = new Date();
+        return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    }
+
+    // 2. [추가] 오늘 날짜 문자열 생성 (예: "01-20")
+    function getTodayDateString() {
+        const now = new Date();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        return `${mm}-${dd}`;
+    }
+
+    // 시드 기반 난수 생성기
+    function mulberry32(a) {
+        return function() {
+          var t = a += 0x6D2B79F5;
+          t = Math.imul(t ^ t >>> 15, t | 1);
+          t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        }
+    }
+
+    const todaySeed = getTodaySeed();
+    const seededRandom = mulberry32(todaySeed);
+    const todayDateStr = getTodayDateString(); // 오늘 날짜 저장 (예: 01-20)
+
+    function getRandomInt(max) {
+        return Math.floor(seededRandom() * max);
+    }
+
+    // 데이터 생성 함수 (날짜 추가됨)
+    function createScrollerItem() {
+        const name = lastNames[getRandomInt(lastNames.length)] + '**';
+        const goal = goals[getRandomInt(goals.length)];
+        const edu = educations[getRandomInt(educations.length)];
+        const method = methods[getRandomInt(methods.length)];
+
+        const div = document.createElement('div');
+        div.className = 'scroller-item';
+        
+        // HTML 구조 수정: 상세 내용 맨 뒤에 날짜 추가
+        div.innerHTML = `
+            <div class="scroller-info">
+                <span class="scroller-name">${name}</span>
+                <div class="scroller-detail">
+                    ${goal} 
+                    <span style="opacity:0.4; margin:0 4px">|</span> 
+                    ${edu}
+                </div>
+            </div>
+            <div style="text-align:right;display:flex;align-items:center">
+                <div style="font-size:0.75rem; color:#f4df11; margin-bottom:2px; font-weight:bold;">${todayDateStr}</div>
+                <span class="scroller-tag">${method}</span>
+            </div>
+        `;
+        return div;
+    }
+
+    function initScroller() {
+        if (!scrollerTrack) return;
+        scrollerTrack.innerHTML = ''; // 초기화
+
+        const itemCount = 8; 
+        const items = [];
+
+        for (let i = 0; i < itemCount; i++) {
+            const item = createScrollerItem();
+            items.push(item);
+            scrollerTrack.appendChild(item);
+        }
+
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            scrollerTrack.appendChild(clone);
+        });
+    }
+
+    initScroller();
+
 });
