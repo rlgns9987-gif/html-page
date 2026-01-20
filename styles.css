@@ -46,8 +46,6 @@ section {
     overflow: hidden;
     width: 100vw;
     max-width: 100%;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
 }
 
 .hero-overlay {
@@ -267,8 +265,6 @@ section {
 .new-consult-section {
     width: 100vw;
     max-width: 100%;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
     overflow: hidden;
 }
 
@@ -318,8 +314,6 @@ section {
 .new-why-section {
     width: 100vw;
     max-width: 100%;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
     overflow: hidden;
 }
 
@@ -371,8 +365,6 @@ section {
     padding: 3rem 0;
     width: 100vw;
     max-width: 100%;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
     overflow-x: hidden;
 }
 
@@ -529,8 +521,6 @@ section {
     padding: 5rem 0;
     width: 100vw;
     max-width: 100%;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
     overflow-x: hidden;
 }
 
@@ -730,8 +720,6 @@ section {
     padding: 3rem 0;
     width: 100vw;
     max-width: 100%;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
     overflow-x: hidden;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
