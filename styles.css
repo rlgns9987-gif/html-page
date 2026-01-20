@@ -380,7 +380,7 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1920');
+    background-image: url('main_.png');
     background-size: cover;
     background-position: center;
     filter: grayscale(100%);
