@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모두에듀 - 관리자 로그인</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nanum Gothic', -apple-system, sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            background: #242424;
+            padding: 3rem 2.5rem;
+            border-radius: 1.5rem;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .login-header h1 {
+            color: white;
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f4df11;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #f4df11;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: #fff04d;
+            transform: translateY(-2px);
+        }
+
+        .login-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #f4df11;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>🔐 관리자 로그인</h1>
+            <p>모두에듀 상담 관리 시스템</p>
+        </div>
+
+        <div class="error-message" id="errorMsg"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">아이디</label>
+                <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">로그인</button>
+        </form>
+
+        <a href="/" class="back-link">← 메인 페이지로 돌아가기</a>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMsg = document.getElementById('errorMsg');
+
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 에러 메시지 숨기기
+            errorMsg.classList.remove('show');
+            
+            // 버튼 비활성화
+            loginBtn.disabled = true;
+            loginBtn.textContent = '로그인 중...';
+
+            try {
+                const response = await fetch('/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 로그인 성공 - 관리자 페이지로 이동
+                    window.location.href = '/admin';
+                } else {
+                    // 로그인 실패
+                    errorMsg.textContent = result.error || '로그인에 실패했습니다.';
+                    errorMsg.classList.add('show');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.textContent = '네트워크 오류가 발생했습니다.';
+                errorMsg.classList.add('show');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = '로그인';
+            }
+        });
+    </script>
+</body>
+</html>
