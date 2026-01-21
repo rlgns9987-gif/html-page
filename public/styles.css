@@ -17,6 +17,7 @@ body {
     line-height: 1.6;
     color: #333;
     -webkit-font-smoothing: antialiased;
+    font-family: 'Nanum Gothic', sans-serif;
 }
 
 .container {
@@ -89,17 +90,16 @@ section {
 /* Hero Section 로고 스타일 추가 */
 .hero-logo {
     display: block;
-    margin: 0 auto 2rem auto; /* 중앙 정렬 및 아래쪽 여백 2rem */
-    width: 200px;             /* 모바일 기준 기본 너비 */
-    max-width: 80%;           /* 화면이 작을 때 삐져나가지 않게 제한 */
-    height: auto;             /* 비율 유지 */
-    animation: fadeInUp 0.8s ease-out; /* 등장 애니메이션 효과 (타이틀과 동일) */
+    margin: 0 auto 2rem auto;
+    width: 200px;
+    max-width: 80%;
+    height: auto;
+    animation: fadeInUp 0.8s ease-out;
 }
 
-/* 태블릿 및 PC 화면 (화면 너비 768px 이상) */
 @media (min-width: 768px) {
     .hero-logo { 
-        width: 320px;         /* PC에서는 더 크게 보이기 */
+        width: 320px;
         margin-bottom: 2.5rem; 
     }
 }
@@ -181,14 +181,12 @@ section {
     margin-bottom: 0.5rem;
     letter-spacing: -1px;
     line-height: 1;
-
-    /* [수정] 자릿수 변경 시 영역 고정 및 떨림 방지 */
-    display: inline-block;       /* 너비(width) 값을 적용하기 위해 필수 */
-    min-width: 5em;              /* 4자리 숫자+단위가 들어갈 공간 미리 확보 (글자 크기 비례) */
-    text-align: center;          /* 확보된 공간 안에서 숫자는 가운데 정렬 */
-    font-variant-numeric: tabular-nums; /* 숫자의 너비를 일정하게 고정 (1과 8의 너비를 같게) */
-    white-space: nowrap;         /* 줄바꿈 방지 */
-    min-width: 4em; /* PC에선 조금 더 넉넉하게 */
+    display: inline-block;
+    min-width: 5em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    min-width: 4em;
 }
 
 .hero-stat-label {
@@ -703,6 +701,12 @@ section {
 
 .submit-button:hover { background: #fff04d; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(244, 223, 17, 0.3); }
 .submit-button:active { transform: translateY(-1px); }
+.submit-button:disabled {
+    background: #888;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
 @media (min-width: 640px) {
     .checkbox-grid-2col { grid-template-columns: repeat(2, 1fr); }
@@ -769,65 +773,47 @@ section {
     .floating-buttons { right: 2rem; bottom: 2rem; }
 }
 
-/* =========================================
-   애니메이션 효과 추가 (맨 아래에 붙여넣기)
-   ========================================= */
-
-/* 1. 스크롤 페이드 인 기본 상태 (안 보임) */
+/* 애니메이션 효과 */
 .animate-on-scroll {
     opacity: 0;
-    transform: translateY(40px); /* 아래에서 대기 */
+    transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     will-change: opacity, transform;
 }
 
-/* 2. 자바스크립트로 is-visible 클래스가 붙으면 나타남 */
 .animate-on-scroll.is-visible {
     opacity: 1;
-    transform: translateY(0); /* 원래 위치로 */
+    transform: translateY(0);
 }
 
-/* 3. 리뷰 카드 순차적 등장 (시차 효과) */
-/* PC 화면에서 카드들이 하나씩 따닥- 하고 나타나게 딜레이를 줍니다 */
 .review-card.animate-on-scroll:nth-child(1) { transition-delay: 0.1s; }
 .review-card.animate-on-scroll:nth-child(2) { transition-delay: 0.2s; }
 .review-card.animate-on-scroll:nth-child(3) { transition-delay: 0.3s; }
-.review-card.animate-on-scroll:nth-child(4) { transition-delay: 0.1s; } /* 2열 시작 */
+.review-card.animate-on-scroll:nth-child(4) { transition-delay: 0.1s; }
 .review-card.animate-on-scroll:nth-child(5) { transition-delay: 0.2s; }
 .review-card.animate-on-scroll:nth-child(6) { transition-delay: 0.3s; }
 
-/* 4. 숫자 카운트 애니메이션 시 숫자 너비 고정 (떨림 방지) */
 .hero-stat-number {
     font-variant-numeric: tabular-nums;
 }
-/* =========================================
-   추가된 스타일 (맨 아래에 붙여넣기)
-   ========================================= */
 
-/* ... (이전 애니메이션 코드는 그대로 유지) ... */
-
-/* [새로 추가] 모바일 무한 슬라이드용 복제 카드 처리 */
-/* PC 화면(768px 이상)에서는 복제된 7번째 카드를 숨김 */
 @media (min-width: 768px) {
     .review-card.clone-card {
         display: none !important;
     }
 }
-/* =========================================
-   [추가] 실시간 상담 현황 (Hero 하단 스크롤)
-   ========================================= */
 
+/* 실시간 상담 현황 */
 .hero-live-status {
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(5px);
     padding: 1rem;
     border-radius: 1rem;
-    margin-top: 1rem; /* 기존 stats 바로 아래 띄우기 */
+    margin-top: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: left; /* 내부 텍스트 왼쪽 정렬 */
+    text-align: left;
 }
 
-/* 헤더 (제목 + 빨간점) */
 .live-status-header {
     color: white;
     font-weight: 800;
@@ -855,31 +841,27 @@ section {
     100% { opacity: 1; transform: scale(1); }
 }
 
-/* 스크롤 창 (3개 정도 보이게 높이 설정) */
 .scroller-window {
-    height: 150px; /* 한 줄에 약 50px * 3개 */
+    height: 150px;
     overflow: hidden;
     position: relative;
-    /* 위아래 자연스럽게 흐려지는 마스킹 효과 */
     mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
 }
 
-/* 움직이는 트랙 */
 .scroller-track {
-    animation: scrollUp 20s linear infinite; /* 속도 조절: 20s */
+    animation: scrollUp 20s linear infinite;
 }
 
-/* 리스트 아이템 스타일 */
 .scroller-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0.5rem;
-    border-bottom: 1px dashed rgba(255, 255, 255, 0.1); /* 점선 구분선 */
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
-    height: 50px; /* 높이 고정 (계산 편하게) */
+    height: 50px;
     box-sizing: border-box;
 }
 
@@ -891,17 +873,17 @@ section {
 
 .scroller-name {
     font-weight: bold;
-    color: #f4df11; /* 이름 강조색 */
+    color: #f4df11;
     min-width: 45px;
 }
 
 .scroller-detail {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.7);
-    white-space: nowrap;     /* 줄바꿈 방지 */
-    overflow: hidden;        /* 넘치면 숨김 */
-    text-overflow: ellipsis; /* ... 처리 */
-    max-width: 200px;        /* 모바일 대응 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 
 .scroller-tag {
@@ -914,13 +896,11 @@ section {
     margin-left: 5px;
 }
 
-/* 무한 스크롤 애니메이션 (절반만큼 위로 이동) */
 @keyframes scrollUp {
     0% { transform: translateY(0); }
     100% { transform: translateY(-50%); }
 }
 
-/* 모바일 대응 */
 @media (max-width: 480px) {
     .scroller-detail {
         font-size: 0.8rem;
@@ -930,8 +910,94 @@ section {
         gap: 0.5rem;
     }
 }
+
 @media (min-width:768px) {
     .hero-live-status {
         padding: 1.5rem;
     }
+}
+
+/* =========================================
+   모달 스타일 (신규 추가)
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    padding: 3rem 2rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-icon {
+    width: 60px;
+    height: 60px;
+    background: #f4df11;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: #1a1a1a;
+    font-weight: bold;
+}
+
+.modal-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.modal-message {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.modal-button {
+    background: #f4df11;
+    color: #1a1a1a;
+    padding: 1rem 3rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.modal-button:hover {
+    background: #fff04d;
+    transform: translateY(-2px);
 }

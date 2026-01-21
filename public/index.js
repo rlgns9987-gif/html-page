@@ -4,32 +4,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // 1. 슬라이더 기능 (모바일 무한 루프 + PC 반응형)
     // ==========================================================
     const track = document.querySelector('.reviews-track');
-    const originalCards = document.querySelectorAll('.review-card'); // 원래 카드들 (6개)
+    const originalCards = document.querySelectorAll('.review-card');
     const nextBtn = document.querySelector('.slider-next');
     
     let currentIndex = 0;
-    let isSliding = false; // 슬라이드 중 클릭 방지
+    let isSliding = false;
 
-    // [핵심 1] 복제 카드 생성 시 애니메이션 제거 (즉시 보이게 설정)
     if (track && originalCards.length > 0) {
         const cloneFirst = originalCards[0].cloneNode(true);
         cloneFirst.classList.add('clone-card'); 
-        
-        // 복제된 카드는 스크롤 애니메이션 클래스를 제거하고 투명도를 1로 고정
         cloneFirst.classList.remove('animate-on-scroll'); 
         cloneFirst.style.opacity = '1';
         cloneFirst.style.transform = 'translateY(0)';
-        
         track.appendChild(cloneFirst);
     }
 
-    // 복제된 카드를 포함한 전체 리스트 다시 선택
     const allCards = document.querySelectorAll('.review-card'); 
 
     function updateSlider(withTransition = true) {
         if (!track) return;
 
-        // PC 화면 (768px 이상)
         if (window.innerWidth >= 768) {
             if(nextBtn) nextBtn.style.display = "none";
             track.style.flexWrap = 'wrap';
@@ -39,9 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             originalCards.forEach(card => {
                 card.style.width = '33.333%'; 
             });
-        } 
-        // 모바일 화면
-        else {
+        } else {
             if(nextBtn) nextBtn.style.display = "block";
             track.style.flexWrap = 'nowrap';
             track.style.width = `${allCards.length * 100}%`;
@@ -59,28 +51,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function nextSlide() {
         if (isSliding || window.innerWidth >= 768) return; 
 
-        // [핵심 2] 버튼을 누르는 순간, 모든 카드의 페이드 인 대기 상태를 해제하고 즉시 보이게 함
-        // 이렇게 하면 넘길 때 페이드 인 애니메이션 없이 슬라이드만 깔끔하게 됩니다.
         allCards.forEach(card => {
             if (card.classList.contains('animate-on-scroll')) {
                 card.classList.add('is-visible');
-                card.style.opacity = '1'; // 강제 적용
-                card.style.transform = 'translateY(0)'; // 강제 적용
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
             }
         });
 
         const totalSlides = allCards.length; 
         
-        // 1. 다음 슬라이드로 이동
         currentIndex++;
         isSliding = true;
         updateSlider(true); 
 
-        // 2. 무한 루프 처리 (마지막 복제 카드 도착 시)
         if (currentIndex === totalSlides - 1) {
             setTimeout(() => {
                 currentIndex = 0; 
-                updateSlider(false); // 애니메이션 끄고 순간이동
+                updateSlider(false);
                 isSliding = false;   
             }, 400); 
         } else {
@@ -103,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // ==========================================================
-    // 2. 숫자 카운트 업 애니메이션 (Hero Stats) - 기존 동일
+    // 2. 숫자 카운트 업 애니메이션 (Hero Stats)
     // ==========================================================
     const statsSection = document.querySelector('.hero-stats');
     const statNumbers = document.querySelectorAll('.hero-stat-number');
@@ -149,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting && !statsAnimated) {
                 statsAnimated = true;
-                console.log(statNumbers)
                 statNumbers.forEach(statNum => {
                     const originalText = statNum.textContent;
                     const { targetValue, suffix } = parseStatValue(originalText);
@@ -167,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // ==========================================================
-    // 3. 스크롤 페이드 인 애니메이션 (이미지 포함 전체 적용)
+    // 3. 스크롤 페이드 인 애니메이션
     // ==========================================================
     const scrollElements = document.querySelectorAll('.animate-on-scroll');
 
@@ -184,12 +171,12 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollObserver.observe(el);
     });
 
+
     // ==========================================================
-    // 4. [수정] 실시간 상담 현황 (일일 고정 랜덤 - Seeded Random)
+    // 4. 실시간 상담 현황 (일일 고정 랜덤)
     // ==========================================================
     const scrollerTrack = document.querySelector('.scroller-track');
 
-    // 랜덤 데이터 소스
     const lastNames = ['김', '이', '박', '최', '정', '강', '조', '윤', '장', '임', '한', '오', '서', '신', '권'];
     const goals = [
         '사회복지사 2급', '전기공학', '경영학', '심리학', 
@@ -199,13 +186,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const educations = ['고등학교 졸업', '전문대 졸업', '4년제 졸업', '대학 중퇴', '대학 제적'];
     const methods = ['전화상담', '카카오톡'];
 
-    // 1. 오늘 날짜 시드 생성 (어제와 다른 랜덤 명단을 위해)
     function getTodaySeed() {
         const now = new Date();
         return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
     }
 
-    // 2. [추가] 오늘 날짜 문자열 생성 (예: "01-20")
     function getTodayDateString() {
         const now = new Date();
         const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -213,7 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${mm}-${dd}`;
     }
 
-    // 시드 기반 난수 생성기
     function mulberry32(a) {
         return function() {
           var t = a += 0x6D2B79F5;
@@ -225,13 +209,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const todaySeed = getTodaySeed();
     const seededRandom = mulberry32(todaySeed);
-    const todayDateStr = getTodayDateString(); // 오늘 날짜 저장 (예: 01-20)
+    const todayDateStr = getTodayDateString();
 
     function getRandomInt(max) {
         return Math.floor(seededRandom() * max);
     }
 
-    // 데이터 생성 함수 (날짜 추가됨)
     function createScrollerItem() {
         const name = lastNames[getRandomInt(lastNames.length)] + '**';
         const goal = goals[getRandomInt(goals.length)];
@@ -241,7 +224,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const div = document.createElement('div');
         div.className = 'scroller-item';
         
-        // HTML 구조 수정: 상세 내용 맨 뒤에 날짜 추가
         div.innerHTML = `
             <div class="scroller-info">
                 <span class="scroller-name">${name}</span>
@@ -261,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initScroller() {
         if (!scrollerTrack) return;
-        scrollerTrack.innerHTML = ''; // 초기화
+        scrollerTrack.innerHTML = '';
 
         const itemCount = 8; 
         const items = [];
@@ -280,11 +262,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initScroller();
 
+
     // ==========================================================
-    // 5. [추가] 버튼 클릭 이벤트 (스크롤 이동 & 문의 링크)
+    // 5. 버튼 클릭 이벤트 (스크롤 이동 & 문의 링크)
     // ==========================================================
     
-    // 1) "1:1 무료 상담 받기" 버튼 클릭 시 -> 상담 폼으로 부드럽게 스크롤 이동
     const ctaBtn = document.querySelector('.hero-cta');
     const contactSection = document.querySelector('.contact-form-section');
 
@@ -294,12 +276,129 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 2) 우측 하단 "문의" 버튼 클릭 시 -> 카카오톡 채팅방 새 창으로 열기
     const floatingInquiryBtn = document.querySelector('.floating-inquiry');
 
     if (floatingInquiryBtn) {
         floatingInquiryBtn.addEventListener('click', function() {
             window.open('http://pf.kakao.com/_cxgiAX/chat', '_blank');
+        });
+    }
+
+
+    // ==========================================================
+    // 6. [신규] 상담 신청 폼 제출 (API 연동)
+    // ==========================================================
+    const consultForm = document.getElementById('consultForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successModal = document.getElementById('successModal');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    if (consultForm) {
+        consultForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // 폼 데이터 수집
+            const formData = {
+                name: document.getElementById('nameInput').value.trim(),
+                phone: document.getElementById('phoneInput').value.trim(),
+                goals: [],
+                education: null,
+                contactMethod: null
+            };
+
+            // 학습목표 (다중 선택)
+            const goalCheckboxes = document.querySelectorAll('input[name="goal"]:checked');
+            goalCheckboxes.forEach(cb => formData.goals.push(cb.value));
+
+            // 최종학력 (첫 번째 선택값만)
+            const educationCheckboxes = document.querySelectorAll('input[name="education"]:checked');
+            if (educationCheckboxes.length > 0) {
+                formData.education = educationCheckboxes[0].value;
+            }
+
+            // 상담 방식
+            const contactMethodRadio = document.querySelector('input[name="contact-method"]:checked');
+            if (contactMethodRadio) {
+                formData.contactMethod = contactMethodRadio.value;
+            }
+
+            // 유효성 검사
+            if (formData.goals.length === 0) {
+                alert('학습목표를 선택해주세요.');
+                return;
+            }
+            if (!formData.education) {
+                alert('최종학력을 선택해주세요.');
+                return;
+            }
+            if (!formData.name) {
+                alert('성함을 입력해주세요.');
+                return;
+            }
+            if (!formData.phone) {
+                alert('연락처를 입력해주세요.');
+                return;
+            }
+            if (!formData.contactMethod) {
+                alert('원하는 상담 방식을 선택해주세요.');
+                return;
+            }
+
+            // 개인정보 동의 확인
+            const privacyAgree = document.getElementById('privacyAgree');
+            if (!privacyAgree.checked) {
+                alert('개인정보 수집 및 이용에 동의해주세요.');
+                return;
+            }
+
+            // 버튼 비활성화 (중복 제출 방지)
+            submitBtn.disabled = true;
+            submitBtn.textContent = '신청 중...';
+
+            try {
+                const response = await fetch('/api/consult', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 성공 모달 표시
+                    successModal.classList.add('active');
+                    
+                    // 폼 초기화
+                    consultForm.reset();
+                } else {
+                    alert(result.error || '상담 신청에 실패했습니다. 다시 시도해주세요.');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '담당자 배정받기';
+            }
+        });
+    }
+
+    // 모달 닫기
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', function() {
+            successModal.classList.remove('active');
+        });
+    }
+
+    // 모달 바깥 클릭 시 닫기
+    if (successModal) {
+        successModal.addEventListener('click', function(e) {
+            if (e.target === successModal) {
+                successModal.classList.remove('active');
+            }
         });
     }
 
