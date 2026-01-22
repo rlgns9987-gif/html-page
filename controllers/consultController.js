@@ -138,7 +138,7 @@ exports.createConsult = async (req, res) => {
         // 이메일 발송 (id 홀수/짝수에 따라)
         const savedData = data[0];
         const emailTo = savedData.id % 2 === 1 
-            ? 'rlgns9987@gmail.com'   // 홀수
+            ? 'xhxmsja112@naver.com'   // 홀수
             : 'rlgns9987@gmail.com'; // 짝수
 
         const info = await sendEmail(emailTo, savedData);
