@@ -4,12 +4,18 @@ const nodemailer = require('nodemailer');
 // 이메일 전송 설정
 const transporter = nodemailer.createTransport({
     host: 'smtp.naver.com',  // 네이버 SMTP 서버 주소
-    port: 465,               // 네이버는 465 포트(SSL)를 권장합니다.
-    secure: true,            // 465 포트를 쓸 때는 true로 설정해야 합니다.
+    port: 587,               // 네이버는 465 포트(SSL)를 권장합니다.
+    secure: false,            // 465 포트를 쓸 때는 true로 설정해야 합니다.
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    tls: {
+        rejectUnauthorized: false // 인증서 에러 무시 (Vercel 환경에서 종종 필요)
+    },
+    connectionTimeout: 10000, 
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 });
 
 // 이메일 발송 함수
@@ -51,7 +57,7 @@ exports.getStats = async (req, res) => {
         const todayEnd = new Date();
         todayEnd.setUTCHours(23, 59, 59, 999);
         const todayEndUTC = new Date(todayEnd.getTime());
-        
+
         // 1. 전체 누적 신청 수
         const { count: totalCount, error: totalError } = await supabase
             .from('consults')
