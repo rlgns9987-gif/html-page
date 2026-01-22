@@ -91,11 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // ==========================================================
-    // 2. 숫자 카운트 업 애니메이션 (Hero Stats)
+    // 2. 숫자 카운트 업 애니메이션 (Hero Stats) + 실제 데이터 로드
     // ==========================================================
     const statsSection = document.querySelector('.hero-stats');
     const statNumbers = document.querySelectorAll('.hero-stat-number');
     let statsAnimated = false;
+    let realStats = null; // 실제 DB 데이터 저장
 
     function parseStatValue(text) {
         const suffixMatch = text.match(/[^0-9.,\s]+$/);
@@ -133,24 +134,89 @@ document.addEventListener('DOMContentLoaded', function() {
         window.requestAnimationFrame(step);
     }
 
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !statsAnimated) {
-                statsAnimated = true;
-                statNumbers.forEach(statNum => {
-                    const originalText = statNum.textContent;
-                    const { targetValue, suffix } = parseStatValue(originalText);
-                    statNum.textContent = "0" + suffix;
-                    animateCounter(statNum, targetValue, suffix, 2000);
-                });
-                statsObserver.unobserve(entry.target);
+    // 실제 통계 데이터 로드
+    async function loadRealStats() {
+        try {
+            const response = await fetch('/api/consult/stats');
+            const result = await response.json();
+            
+            if (result.success) {
+                realStats = result.data;
+                return realStats;
             }
-        });
-    }, { threshold: 0.3 });
-
-    if (statsSection) {
-        statsObserver.observe(statsSection);
+        } catch (error) {
+            console.error('Stats load error:', error);
+        }
+        return null;
     }
+
+    // 애니메이션 시작 함수
+    function startStatsAnimation() {
+        if (statsAnimated) return;
+        statsAnimated = true;
+        
+        statNumbers.forEach((statNum, index) => {
+            let targetValue, suffix;
+            
+            // 실제 데이터가 있으면 사용
+            if (realStats) {
+                if (index === 0) { // 누적 신청 수
+                    targetValue = realStats.totalCount;
+                    suffix = '명';
+                } else if (index === 1) {
+                    targetValue = 30;
+                    suffix = '명';
+                } else if (index === 2) { // 금일 잔여 신청 수
+                    // targetValue = realStats.remainingToday;
+                    targetValue = realStats.remainingToday - 13;
+                    suffix = '명';
+                } else {
+                    targetValue = 98;
+                    suffix = '%';
+                }
+            } else {
+                const parsed = parseStatValue(statNum.textContent);
+                targetValue = parsed.targetValue;
+                suffix = parsed.suffix;
+            }
+            
+            statNum.textContent = "0" + suffix;
+            animateCounter(statNum, targetValue, suffix, 2000);
+        });
+    }
+
+    // 페이지 로드 시 먼저 API 데이터 로드
+    loadRealStats().then(stats => {
+        // 스크롤러 먼저 업데이트
+        if (stats && stats.todayConsults) {
+            initScroller(stats.todayConsults);
+        } else {
+            // API 실패 시 더미 데이터로 표시
+            initScroller([]);
+        }
+        
+        // 데이터 로드 후 IntersectionObserver 등록
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !statsAnimated) {
+                    startStatsAnimation();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        if (statsSection) {
+            // 이미 화면에 보이면 바로 애니메이션 시작
+            const rect = statsSection.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            
+            if (isVisible) {
+                startStatsAnimation();
+            } else {
+                statsObserver.observe(statsSection);
+            }
+        }
+    });
 
 
     // ==========================================================
@@ -173,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // ==========================================================
-    // 4. 실시간 상담 현황 (일일 고정 랜덤)
+    // 4. 실시간 상담 현황 (실제 DB 데이터 + 더미 데이터)
     // ==========================================================
     const scrollerTrack = document.querySelector('.scroller-track');
 
@@ -215,7 +281,41 @@ document.addEventListener('DOMContentLoaded', function() {
         return Math.floor(seededRandom() * max);
     }
 
-    function createScrollerItem() {
+    // 실제 DB 데이터로 스크롤러 아이템 생성
+    function createRealScrollerItem(consult) {
+        const name = consult.name.charAt(0) + '**';
+        const goal = consult.goals && consult.goals.length > 0 ? consult.goals[0] : '학위취득';
+        const edu = consult.education || '고등학교 졸업';
+        const method = consult.contact_method === '전화 상담' ? '전화상담' : '카카오톡';
+        
+        // 신청 시간에서 날짜 추출
+        const createdAt = new Date(consult.created_at);
+        const mm = String(createdAt.getMonth() + 1).padStart(2, '0');
+        const dd = String(createdAt.getDate()).padStart(2, '0');
+        const dateStr = `${mm}-${dd}`;
+
+        const div = document.createElement('div');
+        div.className = 'scroller-item real-consult';
+        
+        div.innerHTML = `
+            <div class="scroller-info">
+                <span class="scroller-name">${name}</span>
+                <div class="scroller-detail">
+                    ${goal} 
+                    <span style="opacity:0.4; margin:0 4px">|</span> 
+                    ${edu}
+                </div>
+            </div>
+            <div style="text-align:right;display:flex;align-items:center">
+                <div style="font-size:0.75rem; color:#f4df11; margin-bottom:2px; font-weight:bold;">${dateStr}</div>
+                <span class="scroller-tag">${method}</span>
+            </div>
+        `;
+        return div;
+    }
+
+    // 더미 데이터 스크롤러 아이템 생성
+    function createDummyScrollerItem() {
         const name = lastNames[getRandomInt(lastNames.length)] + '**';
         const goal = goals[getRandomInt(goals.length)];
         const edu = educations[getRandomInt(educations.length)];
@@ -241,26 +341,68 @@ document.addEventListener('DOMContentLoaded', function() {
         return div;
     }
 
-    function initScroller() {
+    function initScroller(realConsults = []) {
         if (!scrollerTrack) return;
+        
+        // 페이드 아웃
+        scrollerTrack.style.opacity = '0';
         scrollerTrack.innerHTML = '';
 
-        const itemCount = 8; 
         const items = [];
+        
+        // 1. 실제 오늘 신청자 데이터 먼저 추가
+        realConsults.forEach(consult => {
+            const item = createRealScrollerItem(consult);
+            items.push(item);
+            scrollerTrack.appendChild(item);
+        });
 
-        for (let i = 0; i < itemCount; i++) {
-            const item = createScrollerItem();
+        // 2. 나머지는 더미 데이터로 채움 (최소 8개 유지)
+        const dummyCount = Math.max(0, 8 - realConsults.length);
+        for (let i = 0; i < dummyCount; i++) {
+            const item = createDummyScrollerItem();
             items.push(item);
             scrollerTrack.appendChild(item);
         }
 
+        // 3. 무한 스크롤을 위해 복제
         items.forEach(item => {
             const clone = item.cloneNode(true);
             scrollerTrack.appendChild(clone);
         });
+        
+        // 페이드 인 (약간의 딜레이 후)
+        setTimeout(() => {
+            scrollerTrack.style.transition = 'opacity 0.3s ease';
+            scrollerTrack.style.opacity = '1';
+        }, 50);
     }
 
-    initScroller();
+    // 통계 데이터 업데이트 함수 (화면 갱신용)
+    function updateStatsDisplay(stats) {
+        if (!stats) return;
+        
+        // 누적 신청 수
+        if (statNumbers[0]) {
+            statNumbers[0].textContent = stats.totalCount.toLocaleString() + '명';
+        }
+        // 금일 잔여 신청 수
+        if (statNumbers[2]) {
+            statNumbers[2].textContent = stats.remainingToday - 13 + '명';
+        }
+        // 스크롤러 업데이트
+        if (stats.todayConsults) {
+            initScroller(stats.todayConsults);
+        }
+    }
+
+    // 30초마다 자동 갱신 (다른 사용자 신청도 반영)
+    setInterval(async () => {
+        const stats = await loadRealStats();
+        if (stats) {
+            updateStatsDisplay(stats);
+        }
+    }, 30000); // 30초
 
 
     // ==========================================================
@@ -372,6 +514,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // 폼 초기화
                     consultForm.reset();
+                    
+                    // 통계 및 스크롤러 새로고침
+                    loadRealStats().then(stats => {
+                        updateStatsDisplay(stats);
+                    });
                 } else {
                     alert(result.error || '상담 신청에 실패했습니다. 다시 시도해주세요.');
                 }
