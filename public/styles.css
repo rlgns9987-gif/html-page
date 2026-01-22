@@ -90,8 +90,8 @@ section {
 /* Hero Section 로고 스타일 추가 */
 .hero-logo {
     display: block;
-    margin: 0 auto 2rem auto;
-    width: 200px;
+    margin: 2rem auto;
+    width: 240px;
     max-width: 80%;
     height: auto;
     animation: fadeInUp 0.8s ease-out;
@@ -99,8 +99,8 @@ section {
 
 @media (min-width: 768px) {
     .hero-logo { 
-        width: 320px;
-        margin-bottom: 2.5rem; 
+        width: 400px;
+        margin: 2.5rem auto; 
     }
 }
 
@@ -284,6 +284,7 @@ section {
 }
 .consult-solution-area {
     background-image: url(main2_back.png);
+    padding:2rem 0;
 }
 
 .consult-worry-area img,
@@ -305,6 +306,9 @@ section {
     .consult-worry-area,
     .consult-solution-area {
         min-height: 700px;
+    }
+    .consult-solution-area {
+        padding:3rem 0;
     }
 }
 

@@ -291,7 +291,7 @@
                 <div class="filter-group">
                     <button class="filter-btn active" data-filter="all">전체</button>
                     <button class="filter-btn" data-filter="pending">대기중</button>
-                    <button class="filter-btn" data-filter="success">성공</button>
+                    <button class="filter-btn" data-filter="success">결제</button>
                     <button class="filter-btn" data-filter="fail">실패</button>
                 </div>
             </div>
@@ -416,7 +416,7 @@
                         <td>
                             <select class="status-select ${status}" onchange="updateStatus(${item.id}, this.value, this)">
                                 <option value="pending" ${status === 'pending' ? 'selected' : ''}>대기중</option>
-                                <option value="success" ${status === 'success' ? 'selected' : ''}>성공</option>
+                                <option value="success" ${status === 'success' ? 'selected' : ''}>결제</option>
                                 <option value="fail" ${status === 'fail' ? 'selected' : ''}>실패</option>
                             </select>
                         </td>

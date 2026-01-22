@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (floatingInquiryBtn) {
         floatingInquiryBtn.addEventListener('click', function() {
-            window.open('http://pf.kakao.com/_cxgiAX/chat', '_blank');
+            window.open('http://pf.kakao.com/_xnYUAX/chat', '_blank');
         });
     }
 
