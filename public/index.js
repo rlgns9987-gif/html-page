@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const step = (timestamp) => {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const easeOut = 1 - Math.pow(1.6, -10 * progress);
+            const easeOut = 1 - Math.pow(1.7, -10 * progress);
             
             let currentValue = startValue + (target - startValue) * easeOut;
             
