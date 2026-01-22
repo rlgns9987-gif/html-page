@@ -44,18 +44,14 @@ async function sendEmail(to, consultData) {
 exports.getStats = async (req, res) => {
     try {
         // 오늘 날짜 범위 계산 (한국 시간 기준)
-        const now = new Date();
-        const koreaOffset = 9 * 60 * 60 * 1000; // UTC+9
-        const koreaTime = new Date(now.getTime() + koreaOffset);
-        
-        const todayStart = new Date(koreaTime);
+        const todayStart = new Date();
         todayStart.setUTCHours(0, 0, 0, 0);
-        const todayStartUTC = new Date(todayStart.getTime() - koreaOffset);
+        const todayStartUTC = new Date(todayStart.getTime());
         
-        const todayEnd = new Date(koreaTime);
+        const todayEnd = new Date();
         todayEnd.setUTCHours(23, 59, 59, 999);
-        const todayEndUTC = new Date(todayEnd.getTime() - koreaOffset);
-
+        const todayEndUTC = new Date(todayEnd.getTime());
+        
         // 1. 전체 누적 신청 수
         const { count: totalCount, error: totalError } = await supabase
             .from('consults')
