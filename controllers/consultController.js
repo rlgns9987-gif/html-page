@@ -141,8 +141,8 @@ exports.createConsult = async (req, res) => {
             ? 'rlgns9987@gmail.com'   // 홀수
             : 'rlgns9987@gmail.com'; // 짝수
 
-        sendEmail(emailTo, savedData);
-
+        const info = await sendEmail(emailTo, savedData);
+        console.log("성공")
         res.status(201).json({ 
             success: true,
             message: '상담 신청이 완료되었습니다.',
