@@ -1,4 +1,44 @@
 const supabase = require('../models/supabase');
+const nodemailer = require('nodemailer');
+
+// 이메일 전송 설정
+const transporter = nodemailer.createTransport({
+    host: 'smtp.naver.com',  // 네이버 SMTP 서버 주소
+    port: 465,               // 네이버는 465 포트(SSL)를 권장합니다.
+    secure: true,            // 465 포트를 쓸 때는 true로 설정해야 합니다.
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+// 이메일 발송 함수
+async function sendEmail(to, consultData) {
+    const mailOptions = {
+        from: '"모두에듀" <rlgns987@naver.com>',
+        to: to,
+        subject: `[모두에듀] 새 상담 신청 - ${consultData.name}`,
+        html: `
+            <h2>새 상담 신청이 접수되었습니다</h2>
+            <table border="1" cellpadding="10" style="border-collapse: collapse;">
+                <tr><td><strong>ID</strong></td><td>${consultData.id}</td></tr>
+                <tr><td><strong>이름</strong></td><td>${consultData.name}</td></tr>
+                <tr><td><strong>연락처</strong></td><td>${consultData.phone}</td></tr>
+                <tr><td><strong>학습목표</strong></td><td>${consultData.goals.join(', ')}</td></tr>
+                <tr><td><strong>최종학력</strong></td><td>${consultData.education}</td></tr>
+                <tr><td><strong>상담방식</strong></td><td>${consultData.contact_method}</td></tr>
+                <tr><td><strong>신청시간</strong></td><td>${new Date(consultData.created_at).toLocaleString('ko-KR')}</td></tr>
+            </table>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('이메일 발송 성공:', to);
+    } catch (error) {
+        console.error('이메일 발송 실패:', error);
+    }
+}
 
 // 통계 조회 (누적 신청 수, 오늘 신청 수, 오늘 신청자 목록)
 exports.getStats = async (req, res) => {
@@ -92,6 +132,14 @@ exports.createConsult = async (req, res) => {
                 error: '상담 신청 저장에 실패했습니다.' 
             });
         }
+
+        // 이메일 발송 (id 홀수/짝수에 따라)
+        const savedData = data[0];
+        const emailTo = savedData.id % 2 === 1 
+            ? 'rlgns9987@gmail.com'   // 홀수
+            : 'rlgns9987@gmail.com'; // 짝수
+
+        sendEmail(emailTo, savedData);
 
         res.status(201).json({ 
             success: true,

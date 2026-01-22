@@ -244,12 +244,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const scrollerTrack = document.querySelector('.scroller-track');
 
     const lastNames = ['김', '이', '박', '최', '정', '강', '조', '윤', '장', '임', '한', '오', '서', '신', '권'];
-    const goals = [
-        '사회복지사 2급', '전기공학', '경영학', '심리학', 
-        '컴퓨터공학', '학사편입 준비', '일반편입 준비', '전기기사 응시자격', 
-        '산업기사 응시자격', '대학원 진학', 'CPA 응시자격', '한국어교원'
-    ];
-    const educations = ['고등학교 졸업', '전문대 졸업', '4년제 졸업', '대학 중퇴', '대학 제적'];
+    const goals = ['자격증 취득','기사/산업기사','학위취득','대학원 진학','편입 준비','기타'];
+    const educations = ['고등학교 졸업', '전문대 졸업', '4년제 대학 졸업', '대학 중퇴', '기타'];
     const methods = ['전화상담', '카카오톡'];
 
     function getTodaySeed() {
