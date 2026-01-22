@@ -10,8 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 관리자 계정 설정
-const ADMIN_ID = process.env.ADMIN_ID || 'admin';
-const ADMIN_PW = process.env.ADMIN_PW || 'rlgnsWkd12#';
+const ADMIN_ID = process.env.ADMIN_ID;
+const ADMIN_PW = process.env.ADMIN_PW;
 
 // ========================
 // Middleware
@@ -114,6 +114,7 @@ app.use((err, req, res, next) => {
 // Server Start
 // ========================
 app.listen(PORT, () => {
-    console.log(`✅ 서버 실행 중: http://localhost:${PORT}`);
-    console.log(`📋 관리자 페이지: http://localhost:${PORT}/admin`);
+    console.log(`✅ 서버 실행 중: Server is running on port:${PORT}`);
+    console.log(`📋 관리자 페이지: Server is running on port:${PORT}/admin`);
 });
+module.exports = app;
