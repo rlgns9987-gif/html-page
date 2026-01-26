@@ -283,11 +283,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const goal = consult.goals && consult.goals.length > 0 ? consult.goals[0] : '학위취득';
         const edu = consult.education || '고등학교 졸업';
         const method = consult.contact_method === '전화 상담' ? '전화상담' : '카카오톡';
-        
+
         // 신청 시간에서 날짜 추출
         const createdAt = new Date(consult.created_at);
-        const mm = String(createdAt.getMonth() + 1).padStart(2, '0');
-        const dd = String(createdAt.getDate()).padStart(2, '0');
+        const Kdate = new Date(createdAt.getTime() - 9 * 60 * 60 * 1000);
+        const mm = String(Kdate.getMonth() + 1).padStart(2, '0');
+        const dd = String(Kdate.getDate()).padStart(2, '0');
         const dateStr = `${mm}-${dd}`;
 
         const div = document.createElement('div');
