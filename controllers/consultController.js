@@ -138,7 +138,8 @@ exports.createConsult = async (req, res) => {
         // 이메일 발송 (id 홀수/짝수에 따라)
         const savedData = data[0];
         const emailTo = savedData.id % 2 === 1 
-            ? 'xhxmsja112@naver.com'   // 홀수
+            ? 'rlgns9987@gmail.com'   // 홀수
+            // ? 'xhxmsja112@naver.com'   // 홀수
             : 'rlgns9987@gmail.com'; // 짝수
 
         const info = await sendEmail(emailTo, savedData);
@@ -259,7 +260,7 @@ exports.updateStatus = async (req, res) => {
         const { status } = req.body;
 
         // 유효한 상태값 확인
-        const validStatuses = ['pending', 'success', 'fail'];
+        const validStatuses = ['pending', 'paid', 'fail'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ 
                 success: false,

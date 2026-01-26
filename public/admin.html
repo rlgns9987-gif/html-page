@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -38,13 +38,18 @@
             font-size: 1.5rem;
         }
 
+        .header-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
         .refresh-btn {
             background: #f4df11;
             color: #1a1a1a;
-            border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             font-weight: bold;
+            border: none;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -70,59 +75,42 @@
         .logout-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: white;
-            border-color: rgba(255, 255, 255, 0.5);
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
+        /* 필터 영역 */
+        .filters {
             background: white;
             padding: 1.5rem;
             border-radius: 1rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .stat-card h3 {
-            font-size: 0.875rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card .number {
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .stat-card.total .number { color: #1a1a1a; }
-        .stat-card.pending .number { color: #f59e0b; }
-        .stat-card.success .number { color: #10b981; }
-        .stat-card.fail .number { color: #ef4444; }
-
-        .table-wrapper {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-
-        .table-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #eee;
             display: flex;
-            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
             align-items: center;
         }
 
-        .table-header h2 {
-            font-size: 1.25rem;
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .filter-group {
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .filter-buttons {
             display: flex;
             gap: 0.5rem;
         }
@@ -134,6 +122,7 @@
             border-radius: 0.5rem;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 0.875rem;
         }
 
         .filter-btn:hover {
@@ -146,21 +135,76 @@
             border-color: #1a1a1a;
         }
 
+        /* 통계 카드 */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 1.75rem;
+            font-weight: 800;
+        }
+
+        .stat-card.total .number { color: #1a1a1a; }
+        .stat-card.pending .number { color: #f59e0b; }
+        .stat-card.paid .number { color: #10b981; }
+        .stat-card.fail .number { color: #ef4444; }
+
+        /* 테이블 */
+        .table-wrapper {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 1200px;
         }
 
         th, td {
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.25rem;
             text-align: left;
             border-bottom: 1px solid #eee;
+            white-space: nowrap;
         }
 
         th {
             background: #fafafa;
             font-weight: 700;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             color: #666;
         }
 
@@ -170,24 +214,43 @@
 
         .goals-cell {
             max-width: 200px;
+            white-space: normal;
         }
 
         .goal-tag {
             display: inline-block;
             background: #e5e7eb;
-            padding: 0.25rem 0.5rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 0.25rem;
-            font-size: 0.75rem;
-            margin: 0.125rem;
+            font-size: 0.7rem;
+            margin: 0.1rem;
+        }
+
+        .manager-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .manager-badge.seungmin {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .manager-badge.gihun {
+            background: #fce7f3;
+            color: #be185d;
         }
 
         .status-select {
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.75rem;
             border: 1px solid #ddd;
             border-radius: 0.5rem;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            min-width: 120px;
+            min-width: 100px;
         }
 
         .status-select.pending {
@@ -196,7 +259,7 @@
             color: #92400e;
         }
 
-        .status-select.success {
+        .status-select.paid {
             background: #d1fae5;
             border-color: #10b981;
             color: #065f46;
@@ -212,10 +275,10 @@
             background: #fee2e2;
             color: #dc2626;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.75rem;
             border-radius: 0.5rem;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
         }
 
@@ -224,34 +287,34 @@
             color: white;
         }
 
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .empty {
+        .loading, .empty {
             text-align: center;
             padding: 3rem;
             color: #999;
         }
 
         .date-cell {
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             color: #666;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
             body {
                 padding: 1rem;
             }
-
-            .table-wrapper {
-                overflow-x: auto;
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            table {
-                min-width: 1000px;
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -260,24 +323,52 @@
     <div class="container">
         <header>
             <h1>📋 상담 신청 관리</h1>
-            <div style="display: flex; gap: 0.75rem;">
-                <button class="refresh-btn" onclick="loadConsults()">🔄 새로고침</button>
+            <div class="header-buttons">
+                <button class="refresh-btn" onclick="loadConsults()">새로고침</button>
                 <a href="/admin/logout" class="logout-btn">로그아웃</a>
             </div>
         </header>
 
+        <!-- 필터 영역 -->
+        <div class="filters">
+            <div class="filter-group">
+                <label>월별</label>
+                <select id="monthFilter" onchange="applyFilters()">
+                    <option value="all">전체</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>담당자</label>
+                <select id="managerFilter" onchange="applyFilters()">
+                    <option value="all">전체</option>
+                    <option value="seungmin">승민</option>
+                    <option value="gihun">기훈</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>상태</label>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-status="all">전체</button>
+                    <button class="filter-btn" data-status="pending">대기중</button>
+                    <button class="filter-btn" data-status="success">결제</button>
+                    <button class="filter-btn" data-status="fail">실패</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 통계 카드 -->
         <div class="stats">
             <div class="stat-card total">
-                <h3>전체 신청</h3>
+                <h3>전체</h3>
                 <div class="number" id="totalCount">-</div>
             </div>
             <div class="stat-card pending">
                 <h3>대기중</h3>
                 <div class="number" id="pendingCount">-</div>
             </div>
-            <div class="stat-card success">
+            <div class="stat-card paid">
                 <h3>결제</h3>
-                <div class="number" id="successCount">-</div>
+                <div class="number" id="paidCount">-</div>
             </div>
             <div class="stat-card fail">
                 <h3>실패</h3>
@@ -285,66 +376,94 @@
             </div>
         </div>
 
+        <!-- 테이블 -->
         <div class="table-wrapper">
             <div class="table-header">
                 <h2>상담 신청 목록</h2>
-                <div class="filter-group">
-                    <button class="filter-btn active" data-filter="all">전체</button>
-                    <button class="filter-btn" data-filter="pending">대기중</button>
-                    <button class="filter-btn" data-filter="success">결제</button>
-                    <button class="filter-btn" data-filter="fail">실패</button>
-                </div>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>신청일시</th>
-                        <th>이름</th>
-                        <th>연락처</th>
-                        <th>학습목표</th>
-                        <th>최종학력</th>
-                        <th>상담방식</th>
-                        <th>상태</th>
-                        <th>삭제</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="9" class="loading">데이터를 불러오는 중...</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>담당자</th>
+                            <th>신청일시</th>
+                            <th>이름</th>
+                            <th>연락처</th>
+                            <th>학습목표</th>
+                            <th>최종학력</th>
+                            <th>상담방식</th>
+                            <th>상태</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="10" class="loading">데이터를 불러오는 중...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
         let allData = [];
-        let currentFilter = 'all';
+        let currentStatusFilter = 'all';
+        let currentMonthFilter = 'all';
+        let currentManagerFilter = 'all';
 
-        // 페이지 로드 시 데이터 불러오기
         document.addEventListener('DOMContentLoaded', function() {
             loadConsults();
-            setupFilterButtons();
+            setupStatusFilterButtons();
+            generateMonthOptions();
         });
 
-        // 필터 버튼 설정
-        function setupFilterButtons() {
+        // 상태 필터 버튼 설정
+        function setupStatusFilterButtons() {
             const filterBtns = document.querySelectorAll('.filter-btn');
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
-                    currentFilter = this.dataset.filter;
-                    renderTable();
+                    currentStatusFilter = this.dataset.status;
+                    applyFilters();
                 });
             });
+        }
+
+        // 월별 옵션 생성 (최근 12개월)
+        function generateMonthOptions() {
+            const monthFilter = document.getElementById('monthFilter');
+            const now = new Date();
+            
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const value = `${year}-${String(month).padStart(2, '0')}`;
+                const label = `${year}년 ${month}월`;
+                
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = label;
+                monthFilter.appendChild(option);
+            }
+        }
+
+        // 담당자 결정 (id 홀수: 승민, 짝수: 기훈)
+        function getManager(id) {
+            return id % 2 === 1 ? 'seungmin' : 'gihun';
+        }
+
+        function getManagerName(id) {
+            return id % 2 === 1 ? '승민' : '기훈';
         }
 
         // 데이터 불러오기
         async function loadConsults() {
             const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '<tr><td colspan="9" class="loading">데이터를 불러오는 중...</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="10" class="loading">데이터를 불러오는 중...</td></tr>';
 
             try {
                 const response = await fetch('/api/consult');
@@ -352,61 +471,86 @@
 
                 if (result.success) {
                     allData = result.data;
-                    updateStats();
-                    renderTable();
+                    applyFilters();
                 } else {
-                    tableBody.innerHTML = '<tr><td colspan="9" class="empty">데이터를 불러오는데 실패했습니다.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="10" class="empty">데이터를 불러오는데 실패했습니다.</td></tr>';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                tableBody.innerHTML = '<tr><td colspan="9" class="empty">네트워크 오류가 발생했습니다.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="10" class="empty">네트워크 오류가 발생했습니다.</td></tr>';
             }
         }
 
+        // 필터 적용
+        function applyFilters() {
+            currentMonthFilter = document.getElementById('monthFilter').value;
+            currentManagerFilter = document.getElementById('managerFilter').value;
+
+            let filtered = allData;
+            // 월별 필터
+            if (currentMonthFilter !== 'all') {
+                filtered = filtered.filter(d => {
+                    const date = new Date(d.created_at);
+                    const Kdate = new Date(date.getTime() - 9 * 60 * 60 * 1000);
+                    const yearMonth = `${Kdate.getFullYear()}-${String(Kdate.getMonth() + 1).padStart(2, '0')}`;
+                    return yearMonth === currentMonthFilter;
+                });
+            }
+
+            // 담당자 필터
+            if (currentManagerFilter !== 'all') {
+                filtered = filtered.filter(d => getManager(d.id) === currentManagerFilter);
+            }
+
+            // 상태 필터
+            if (currentStatusFilter !== 'all') {
+                filtered = filtered.filter(d => {
+                    const status = d.status || 'pending';
+                    return status === currentStatusFilter;
+                });
+            }
+
+            updateStats(filtered);
+            renderTable(filtered);
+        }
+
         // 통계 업데이트
-        function updateStats() {
-            const total = allData.length;
-            const pending = allData.filter(d => d.status === 'pending' || !d.status).length;
-            const success = allData.filter(d => d.status === 'success').length;
-            const fail = allData.filter(d => d.status === 'fail').length;
+        function updateStats(data) {
+            const total = data.length;
+            const pending = data.filter(d => d.status === 'pending' || !d.status).length;
+            const paid = data.filter(d => d.status === 'paid').length;
+            const fail = data.filter(d => d.status === 'fail').length;
 
             document.getElementById('totalCount').textContent = total;
             document.getElementById('pendingCount').textContent = pending;
-            document.getElementById('successCount').textContent = success;
+            document.getElementById('paidCount').textContent = paid;
             document.getElementById('failCount').textContent = fail;
         }
 
         // 테이블 렌더링
-        function renderTable() {
+        function renderTable(data) {
             const tableBody = document.getElementById('tableBody');
-            
-            let filteredData = allData;
-            if (currentFilter !== 'all') {
-                filteredData = allData.filter(d => {
-                    if (currentFilter === 'pending') {
-                        return d.status === 'pending' || !d.status;
-                    }
-                    return d.status === currentFilter;
-                });
-            }
 
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="9" class="empty">데이터가 없습니다.</td></tr>';
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="10" class="empty">데이터가 없습니다.</td></tr>';
                 return;
             }
 
-            tableBody.innerHTML = filteredData.map(item => {
+            tableBody.innerHTML = data.map(item => {
                 const date = new Date(item.created_at);
-                const dateStr = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-                
+                const Kdate = new Date(date.getTime() - 9 * 60 * 60 * 1000);
+                const dateStr = Kdate.toLocaleDateString('ko-KR') + ' ' + Kdate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
                 const goals = item.goals || [];
                 const goalsHtml = goals.map(g => `<span class="goal-tag">${g}</span>`).join('');
                 
                 const status = item.status || 'pending';
+                const manager = getManager(item.id);
+                const managerName = getManagerName(item.id);
 
                 return `
                     <tr data-id="${item.id}">
                         <td>${item.id}</td>
+                        <td><span class="manager-badge ${manager}">${managerName}</span></td>
                         <td class="date-cell">${dateStr}</td>
                         <td>${item.name}</td>
                         <td>${item.phone}</td>
@@ -416,7 +560,7 @@
                         <td>
                             <select class="status-select ${status}" onchange="updateStatus(${item.id}, this.value, this)">
                                 <option value="pending" ${status === 'pending' ? 'selected' : ''}>대기중</option>
-                                <option value="success" ${status === 'success' ? 'selected' : ''}>결제</option>
+                                <option value="paid" ${status === 'paid' ? 'selected' : ''}>결제</option>
                                 <option value="fail" ${status === 'fail' ? 'selected' : ''}>실패</option>
                             </select>
                         </td>
@@ -433,29 +577,21 @@
             try {
                 const response = await fetch(`/api/consult/${id}/status`, {
                     method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ status: newStatus })
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
-                    // 로컬 데이터 업데이트
                     const item = allData.find(d => d.id === id);
-                    if (item) {
-                        item.status = newStatus;
-                    }
+                    if (item) item.status = newStatus;
                     
-                    // select 스타일 업데이트
                     selectElement.className = `status-select ${newStatus}`;
-                    
-                    // 통계 업데이트
-                    updateStats();
+                    applyFilters();
                 } else {
                     alert('상태 변경에 실패했습니다.');
-                    loadConsults(); // 실패 시 새로고침
+                    loadConsults();
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -465,22 +601,15 @@
 
         // 삭제
         async function deleteConsult(id) {
-            if (!confirm('정말 삭제하시겠습니까?')) {
-                return;
-            }
+            if (!confirm('정말 삭제하시겠습니까?')) return;
 
             try {
-                const response = await fetch(`/api/consult/${id}`, {
-                    method: 'DELETE'
-                });
-
+                const response = await fetch(`/api/consult/${id}`, { method: 'DELETE' });
                 const result = await response.json();
 
                 if (result.success) {
-                    // 로컬 데이터에서 제거
                     allData = allData.filter(d => d.id !== id);
-                    updateStats();
-                    renderTable();
+                    applyFilters();
                 } else {
                     alert('삭제에 실패했습니다.');
                 }
