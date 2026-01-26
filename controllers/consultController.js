@@ -20,6 +20,8 @@ const transporter = nodemailer.createTransport({
 
 // 이메일 발송 함수
 async function sendEmail(to, consultData) {
+    const date = new Date(consultData.created_at);
+    const Kdate = new Date(date.getTime() - 9 * 60 * 60 * 1000);
     const mailOptions = {
         from: '"모두에듀" <rlgns987@naver.com>',
         to: to,
@@ -33,7 +35,7 @@ async function sendEmail(to, consultData) {
                 <tr><td><strong>학습목표</strong></td><td>${consultData.goals.join(', ')}</td></tr>
                 <tr><td><strong>최종학력</strong></td><td>${consultData.education}</td></tr>
                 <tr><td><strong>상담방식</strong></td><td>${consultData.contact_method}</td></tr>
-                <tr><td><strong>신청시간</strong></td><td>${new Date(consultData.created_at).toLocaleString('ko-KR')}</td></tr>
+                <tr><td><strong>신청시간</strong></td><td>${Kdate.toLocaleString('ko-KR')}</td></tr>
             </table>
         `
     };
@@ -138,8 +140,7 @@ exports.createConsult = async (req, res) => {
         // 이메일 발송 (id 홀수/짝수에 따라)
         const savedData = data[0];
         const emailTo = savedData.id % 2 === 1 
-            ? 'rlgns9987@gmail.com'   // 홀수
-            // ? 'xhxmsja112@naver.com'   // 홀수
+            ? 'xhxmsja112@naver.com'   // 홀수
             : 'rlgns9987@gmail.com'; // 짝수
 
         const info = await sendEmail(emailTo, savedData);
