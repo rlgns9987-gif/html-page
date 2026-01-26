@@ -1,11 +1,12 @@
 const supabase = require('../models/supabase');
 const nodemailer = require('nodemailer');
+const axios = require('axios'); // 추가됨
 
 // 이메일 전송 설정
 const transporter = nodemailer.createTransport({
     host: 'smtp.naver.com',  // 네이버 SMTP 서버 주소
-    port: 587,               // 네이버는 465 포트(SSL)를 권장합니다.
-    secure: false,            // 465 포트를 쓸 때는 true로 설정해야 합니다.
+    port: 465,               // 네이버는 465 포트(SSL)를 권장합니다.
+    secure: true,            // 465 포트를 쓸 때는 true로 설정해야 합니다.
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -45,6 +46,38 @@ async function sendEmail(to, consultData) {
         console.log('이메일 발송 성공:', to);
     } catch (error) {
         console.error('이메일 발송 실패:', error);
+    }
+}
+
+// 디스코드 알림 발송 함수
+async function sendDiscordNotification(consultData) {
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL; // 디스코드 웹훅 URL
+    if (!webhookUrl) return;
+    
+    const manager = consultData.id % 2 ? "승민" : "기훈";
+    
+    const embedMessage = {
+        embeds: [{
+            title: "[모두에듀] 새로운 상담 신청!",
+            color: 3447003, // 디스코드 브랜드 색상
+            fields: [
+                { name: "담당자", value:manager},
+                { name: "이름", value: consultData.name},
+                { name: "연락처", value: consultData.phone},
+                { name: "학습목표", value: consultData.goals.join(', ') },
+                { name: "최종학력", value: consultData.education},
+                { name: "상담방식", value: consultData.contact_method}
+            ],
+            timestamp: new Date(),
+            footer: { text: "실시간 상담 알림" }
+        }]
+    };
+
+    try {
+        await axios.post(webhookUrl, embedMessage);
+        console.log('디스코드 알림 발송 성공');
+    } catch (error) {
+        console.error('디스코드 알림 발송 실패:', error);
     }
 }
 
@@ -143,7 +176,9 @@ exports.createConsult = async (req, res) => {
             ? 'xhxmsja112@naver.com'   // 홀수
             : 'rlgns9987@gmail.com'; // 짝수
 
-        const info = await sendEmail(emailTo, savedData);
+        await sendEmail(emailTo, savedData);
+        await sendDiscordNotification(savedData);
+
         console.log("성공")
         res.status(201).json({ 
             success: true,
