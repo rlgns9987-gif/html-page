@@ -419,7 +419,7 @@ section {
 .review-image {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     border-radius: 1rem 1rem 0 0;
 }
@@ -432,7 +432,7 @@ section {
 }
 
 .review-body {
-    padding: 1.25rem;
+    padding: 0.75rem;
     background: rgba(0, 0, 0, 0.6);
     border-radius: 0 0 1rem 1rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -443,9 +443,9 @@ section {
     font-size: 1rem;
     font-weight: 700;
     color: white;
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.5rem 0;
     line-height: 1.4;
-    padding-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -513,7 +513,7 @@ section {
     .reviews-track { flex-wrap: wrap; width: 100%; }
     .review-card { width: calc(100% / 3); padding: 0.75rem; }
     .reviews-slider-wrapper { padding: 0 4rem; }
-    .review-body { padding: 1.5rem; }
+    .review-body { padding: 1rem; }
     .review-course { font-size: 1.0625rem; }
 }
 
