@@ -93,13 +93,14 @@ section {
     margin: 2rem auto;
     width: 240px;
     max-width: 80%;
-    height: auto;
+    height: 83px;
     animation: fadeInUp 0.8s ease-out;
 }
 
 @media (min-width: 768px) {
     .hero-logo { 
         width: 400px;
+        height:138px;
         margin: 2.5rem auto; 
     }
 }
