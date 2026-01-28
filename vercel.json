@@ -12,6 +12,10 @@
       "dest": "app.js"
     },
     {
+      "src": "/(favicon\\.ico|favicon\\.png|apple-touch-icon\\.png|.*\\.(css|js|jpg|jpeg|png|gif|svg|webp|ico))",
+      "dest": "/public/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "app.js"
     }
