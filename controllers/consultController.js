@@ -83,6 +83,7 @@ async function sendDiscordNotification(consultData) {
 
 // 통계 조회 (누적 신청 수, 오늘 신청 수, 오늘 신청자 목록)
 exports.getStats = async (req, res) => {
+    return;
     try {
         // 오늘 날짜 범위 계산 (한국 시간 기준)
         const todayStart = new Date();
