@@ -88,6 +88,24 @@
 
     gtag('config', 'AW-17924732241');
     </script>
+    <!-- Event snippet for 페이지 조회 conversion page
+    In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+    <script>
+    function gtag_report_conversion(url) {
+    var callback = function () {
+        if (typeof(url) != 'undefined') {
+        window.location = url;
+        }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-17924732241/xCObCLP7hPEbENHqluNC',
+        'value': 1.0,
+        'currency': 'KRW',
+        'event_callback': callback
+    });
+    return false;
+    }
+    </script>
 
 </head>
 
