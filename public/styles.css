@@ -531,7 +531,7 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920');
+    background-image: url('last.jpg');
     background-size: cover;
     background-position: center;
     filter: grayscale(100%);
