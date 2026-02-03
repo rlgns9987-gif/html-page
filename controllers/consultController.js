@@ -115,7 +115,7 @@ exports.getStats = async (req, res) => {
         }
 
         const todayCount = todayData ? todayData.length : 0;
-        const baseTotal = 1532; // 기본 누적 수
+        const baseTotal = 0; // 기본 누적 수
         const dailyLimit = 20;  // 일일 신청 가능 수
 
         res.status(200).json({
