@@ -31,6 +31,11 @@ app.use(session({
     }
 }));
 
+// privacy 페이지
+app.get('/privacy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'privacy.html'));
+});
+
 // 정적 파일 서빙 (HTML, CSS, JS, 이미지)
 // admin.html은 직접 접근 차단을 위해 제외
 // 변경 후 (정상)
