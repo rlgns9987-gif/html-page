@@ -421,12 +421,12 @@ function initScroller(realConsults = []) {
     }
 
     // 30초마다 자동 갱신 (다른 사용자 신청도 반영)
-    setInterval(async () => {
-        const stats = await loadRealStats();
-        if (stats) {
-            updateStatsDisplay(stats);
-        }
-    }, 30000); // 30초
+    // setInterval(async () => {
+    //     const stats = await loadRealStats();
+    //     if (stats) {
+    //         updateStatsDisplay(stats);
+    //     }
+    // }, 30000); // 30초
 
 
     // ==========================================================
