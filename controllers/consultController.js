@@ -81,61 +81,61 @@ async function sendDiscordNotification(consultData) {
     }
 }
 
-// 통계 조회 (누적 신청 수, 오늘 신청 수, 오늘 신청자 목록)
-exports.getStats = async (req, res) => {
-    try {
-        // 오늘 날짜 범위 계산 (한국 시간 기준)
-        const todayStart = new Date();
-        todayStart.setUTCHours(0, 0, 0, 0);
-        const todayStartUTC = new Date(todayStart.getTime());
+// // 통계 조회 (누적 신청 수, 오늘 신청 수, 오늘 신청자 목록)
+// exports.getStats = async (req, res) => {
+//     try {
+//         // 오늘 날짜 범위 계산 (한국 시간 기준)
+//         const todayStart = new Date();
+//         todayStart.setUTCHours(0, 0, 0, 0);
+//         const todayStartUTC = new Date(todayStart.getTime());
         
-        const todayEnd = new Date();
-        todayEnd.setUTCHours(23, 59, 59, 999);
-        const todayEndUTC = new Date(todayEnd.getTime());
+//         const todayEnd = new Date();
+//         todayEnd.setUTCHours(23, 59, 59, 999);
+//         const todayEndUTC = new Date(todayEnd.getTime());
 
-        // 1. 전체 누적 신청 수
-        const { count: totalCount, error: totalError } = await supabase
-            .from('consults')
-            .select('*', { count: 'exact', head: true });
+//         // 1. 전체 누적 신청 수
+//         const { count: totalCount, error: totalError } = await supabase
+//             .from('consults')
+//             .select('*', { count: 'exact', head: true });
 
-        if (totalError) {
-            console.error('Total count error:', totalError);
-        }
+//         if (totalError) {
+//             console.error('Total count error:', totalError);
+//         }
 
-        // 2. 오늘 신청 수 및 오늘 신청자 목록
-        const { data: todayData, error: todayError } = await supabase
-            .from('consults')
-            .select('id, name, goals, education, contact_method, created_at')
-            .gte('created_at', todayStartUTC.toISOString())
-            .lte('created_at', todayEndUTC.toISOString())
-            .order('created_at', { ascending: false });
+//         // 2. 오늘 신청 수 및 오늘 신청자 목록
+//         const { data: todayData, error: todayError } = await supabase
+//             .from('consults')
+//             .select('id, name, goals, education, contact_method, created_at')
+//             .gte('created_at', todayStartUTC.toISOString())
+//             .lte('created_at', todayEndUTC.toISOString())
+//             .order('created_at', { ascending: false });
 
-        if (todayError) {
-            console.error('Today data error:', todayError);
-        }
+//         if (todayError) {
+//             console.error('Today data error:', todayError);
+//         }
 
-        const todayCount = todayData ? todayData.length : 0;
-        const baseTotal = 0; // 기본 누적 수
-        const dailyLimit = 20;  // 일일 신청 가능 수
+//         const todayCount = todayData ? todayData.length : 0;
+//         const baseTotal = 0; // 기본 누적 수
+//         const dailyLimit = 20;  // 일일 신청 가능 수
 
-        res.status(200).json({
-            success: true,
-            data: {
-                totalCount: baseTotal + (totalCount || 0),  // 기본값 + 실제 DB 수
-                todayCount: todayCount,
-                remainingToday: Math.max(0, dailyLimit - todayCount),
-                todayConsults: todayData || []
-            }
-        });
+//         res.status(200).json({
+//             success: true,
+//             data: {
+//                 totalCount: baseTotal + (totalCount || 0),  // 기본값 + 실제 DB 수
+//                 todayCount: todayCount,
+//                 remainingToday: Math.max(0, dailyLimit - todayCount),
+//                 todayConsults: todayData || []
+//             }
+//         });
 
-    } catch (err) {
-        console.error('Server Error:', err);
-        res.status(500).json({
-            success: false,
-            error: '서버 오류가 발생했습니다.'
-        });
-    }
-};
+//     } catch (err) {
+//         console.error('Server Error:', err);
+//         res.status(500).json({
+//             success: false,
+//             error: '서버 오류가 발생했습니다.'
+//         });
+//     }
+// };
 
 // 상담 신청 생성
 exports.createConsult = async (req, res) => {

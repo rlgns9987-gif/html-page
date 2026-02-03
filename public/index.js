@@ -98,125 +98,125 @@ document.addEventListener('DOMContentLoaded', function() {
     let statsAnimated = false;
     let realStats = null; // 실제 DB 데이터 저장
 
-    function parseStatValue(text) {
-        const suffixMatch = text.match(/[^0-9.,\s]+$/);
-        const suffix = suffixMatch ? suffixMatch[0] : '';
-        const numericString = text.replace(/,/g, '').replace(suffix, '');
-        const targetValue = parseFloat(numericString);
-        return { targetValue, suffix };
-    }
+    // function parseStatValue(text) {
+    //     const suffixMatch = text.match(/[^0-9.,\s]+$/);
+    //     const suffix = suffixMatch ? suffixMatch[0] : '';
+    //     const numericString = text.replace(/,/g, '').replace(suffix, '');
+    //     const targetValue = parseFloat(numericString);
+    //     return { targetValue, suffix };
+    // }
 
-    function animateCounter(element, target, suffix, duration = 2000) {
-        let startTimestamp = null;
-        const startValue = 0;
+    // function animateCounter(element, target, suffix, duration = 2000) {
+    //     let startTimestamp = null;
+    //     const startValue = 0;
 
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            const easeOut = 1 - Math.pow(1.7, -10 * progress);
+    //     const step = (timestamp) => {
+    //         if (!startTimestamp) startTimestamp = timestamp;
+    //         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    //         const easeOut = 1 - Math.pow(1.7, -10 * progress);
             
-            let currentValue = startValue + (target - startValue) * easeOut;
+    //         let currentValue = startValue + (target - startValue) * easeOut;
             
-            if (Number.isInteger(target)) {
-                 currentValue = Math.floor(currentValue);
-            } else {
-                 currentValue = parseFloat(currentValue.toFixed(1));
-            }
+    //         if (Number.isInteger(target)) {
+    //              currentValue = Math.floor(currentValue);
+    //         } else {
+    //              currentValue = parseFloat(currentValue.toFixed(1));
+    //         }
 
-            element.textContent = currentValue.toLocaleString() + suffix;
+    //         element.textContent = currentValue.toLocaleString() + suffix;
 
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                element.textContent = target.toLocaleString() + suffix;
-            }
-        };
-        window.requestAnimationFrame(step);
-    }
+    //         if (progress < 1) {
+    //             window.requestAnimationFrame(step);
+    //         } else {
+    //             element.textContent = target.toLocaleString() + suffix;
+    //         }
+    //     };
+    //     window.requestAnimationFrame(step);
+    // }
 
     // 실제 통계 데이터 로드
-    async function loadRealStats() {
-        try {
-            const response = await fetch('/api/consult/stats');
-            const result = await response.json();
+    // async function loadRealStats() {
+    //     try {
+    //         const response = await fetch('/api/consult/stats');
+    //         const result = await response.json();
             
-            if (result.success) {
-                realStats = result.data;
-                return realStats;
-            }
-        } catch (error) {
-            console.error('Stats load error:', error);
-        }
-        return null;
-    }
+    //         if (result.success) {
+    //             realStats = result.data;
+    //             return realStats;
+    //         }
+    //     } catch (error) {
+    //         console.error('Stats load error:', error);
+    //     }
+    //     return null;
+    // }
 
-    // 애니메이션 시작 함수
-    function startStatsAnimation() {
-        if (statsAnimated) return;
-        statsAnimated = true;
+    // // 애니메이션 시작 함수
+    // function startStatsAnimation() {
+    //     if (statsAnimated) return;
+    //     statsAnimated = true;
         
-        statNumbers.forEach((statNum, index) => {
-            let targetValue, suffix;
+    //     statNumbers.forEach((statNum, index) => {
+    //         let targetValue, suffix;
             
-            // 실제 데이터가 있으면 사용
-            if (realStats) {
-                if (index === 0) { // 누적 신청 수
-                    targetValue = realStats.totalCount;
-                    suffix = '명';
-                } else if (index === 1) {
-                    targetValue = 20;
-                    suffix = '명';
-                } else if (index === 2) { // 금일 잔여 신청 수
-                    // targetValue = realStats.remainingToday;
-                    targetValue = realStats.remainingToday;
-                    suffix = '명';
-                } else {
-                    targetValue = 98;
-                    suffix = '%';
-                }
-            } else {
-                const parsed = parseStatValue(statNum.textContent);
-                targetValue = parsed.targetValue;
-                suffix = parsed.suffix;
-            }
+    //         // 실제 데이터가 있으면 사용
+    //         if (realStats) {
+    //             if (index === 0) { // 누적 신청 수
+    //                 targetValue = realStats.totalCount;
+    //                 suffix = '명';
+    //             } else if (index === 1) {
+    //                 targetValue = 20;
+    //                 suffix = '명';
+    //             } else if (index === 2) { // 금일 잔여 신청 수
+    //                 // targetValue = realStats.remainingToday;
+    //                 targetValue = realStats.remainingToday;
+    //                 suffix = '명';
+    //             } else {
+    //                 targetValue = 98;
+    //                 suffix = '%';
+    //             }
+    //         } else {
+    //             const parsed = parseStatValue(statNum.textContent);
+    //             targetValue = parsed.targetValue;
+    //             suffix = parsed.suffix;
+    //         }
             
-            statNum.textContent = "0" + suffix;
-            animateCounter(statNum, targetValue, suffix, 1000);
-        });
-    }
+    //         statNum.textContent = "0" + suffix;
+    //         animateCounter(statNum, targetValue, suffix, 1000);
+    //     });
+    // }
 
-    // 페이지 로드 시 먼저 API 데이터 로드
-    loadRealStats().then(stats => {
-        // 스크롤러 먼저 업데이트
-        if (stats && stats.todayConsults) {
-            initScroller(stats.todayConsults);
-        } else {
-            // API 실패 시 더미 데이터로 표시
-            initScroller([]);
-        }
+    // // 페이지 로드 시 먼저 API 데이터 로드
+    // loadRealStats().then(stats => {
+    //     // 스크롤러 먼저 업데이트
+    //     if (stats && stats.todayConsults) {
+    //         initScroller(stats.todayConsults);
+    //     } else {
+    //         // API 실패 시 더미 데이터로 표시
+    //         initScroller([]);
+    //     }
         
-        // 데이터 로드 후 IntersectionObserver 등록
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !statsAnimated) {
-                    startStatsAnimation();
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
+    //     // 데이터 로드 후 IntersectionObserver 등록
+    //     const statsObserver = new IntersectionObserver((entries) => {
+    //         entries.forEach(entry => {
+    //             if (entry.isIntersecting && !statsAnimated) {
+    //                 startStatsAnimation();
+    //                 statsObserver.unobserve(entry.target);
+    //             }
+    //         });
+    //     }, { threshold: 0.3 });
 
-        if (statsSection) {
-            // 이미 화면에 보이면 바로 애니메이션 시작
-            const rect = statsSection.getBoundingClientRect();
-            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    //     if (statsSection) {
+    //         // 이미 화면에 보이면 바로 애니메이션 시작
+    //         const rect = statsSection.getBoundingClientRect();
+    //         const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
             
-            if (isVisible) {
-                startStatsAnimation();
-            } else {
-                statsObserver.observe(statsSection);
-            }
-        }
-    });
+    //         if (isVisible) {
+    //             startStatsAnimation();
+    //         } else {
+    //             statsObserver.observe(statsSection);
+    //         }
+    //     }
+    // });
 
 
     // ==========================================================
@@ -248,123 +248,123 @@ document.addEventListener('DOMContentLoaded', function() {
     const educations = ['고등학교 졸업', '전문대 졸업', '4년제 대학 졸업', '대학 중퇴', '기타'];
     const methods = ['전화상담', '카카오톡'];
 
-    function getTodaySeed() {
-        const now = new Date();
-        return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
-    }
+    // function getTodaySeed() {
+    //     const now = new Date();
+    //     return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    // }
 
-    function getTodayDateString() {
-        const now = new Date();
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const dd = String(now.getDate()).padStart(2, '0');
-        return `${mm}-${dd}`;
-    }
+    // function getTodayDateString() {
+    //     const now = new Date();
+    //     const mm = String(now.getMonth() + 1).padStart(2, '0');
+    //     const dd = String(now.getDate()).padStart(2, '0');
+    //     return `${mm}-${dd}`;
+    // }
 
-    function mulberry32(a) {
-        return function() {
-          var t = a += 0x6D2B79F5;
-          t = Math.imul(t ^ t >>> 15, t | 1);
-          t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-          return ((t ^ t >>> 14) >>> 0) / 4294967296;
-        }
-    }
+    // function mulberry32(a) {
+    //     return function() {
+    //       var t = a += 0x6D2B79F5;
+    //       t = Math.imul(t ^ t >>> 15, t | 1);
+    //       t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    //       return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    //     }
+    // }
 
-    const todaySeed = getTodaySeed();
-    const seededRandom = mulberry32(todaySeed);
-    const todayDateStr = getTodayDateString();
+    // const todaySeed = getTodaySeed();
+    // const seededRandom = mulberry32(todaySeed);
+    // const todayDateStr = getTodayDateString();
 
-    function getRandomInt(max) {
-        return Math.floor(seededRandom() * max);
-    }
+    // function getRandomInt(max) {
+    //     return Math.floor(seededRandom() * max);
+    // }
 
-    // 실제 DB 데이터로 스크롤러 아이템 생성
-    function createRealScrollerItem(consult) {
-        const name = consult.name.charAt(0) + '**';
-        const goal = consult.goals && consult.goals.length > 0 ? consult.goals[0] : '학위취득';
-        const edu = consult.education || '고등학교 졸업';
-        const method = consult.contact_method === '전화 상담' ? '전화상담' : '카카오톡';
+    // // 실제 DB 데이터로 스크롤러 아이템 생성
+    // function createRealScrollerItem(consult) {
+    //     const name = consult.name.charAt(0) + '**';
+    //     const goal = consult.goals && consult.goals.length > 0 ? consult.goals[0] : '학위취득';
+    //     const edu = consult.education || '고등학교 졸업';
+    //     const method = consult.contact_method === '전화 상담' ? '전화상담' : '카카오톡';
 
-        // 신청 시간에서 날짜 추출
-        const createdAt = new Date(consult.created_at);
-        const Kdate = new Date(createdAt.getTime() - 9 * 60 * 60 * 1000);
-        const mm = String(Kdate.getMonth() + 1).padStart(2, '0');
-        const dd = String(Kdate.getDate()).padStart(2, '0');
-        const dateStr = `${mm}-${dd}`;
+    //     // 신청 시간에서 날짜 추출
+    //     const createdAt = new Date(consult.created_at);
+    //     const Kdate = new Date(createdAt.getTime() - 9 * 60 * 60 * 1000);
+    //     const mm = String(Kdate.getMonth() + 1).padStart(2, '0');
+    //     const dd = String(Kdate.getDate()).padStart(2, '0');
+    //     const dateStr = `${mm}-${dd}`;
 
-        const div = document.createElement('div');
-        div.className = 'scroller-item real-consult';
+    //     const div = document.createElement('div');
+    //     div.className = 'scroller-item real-consult';
         
-        div.innerHTML = `
-            <div class="scroller-info">
-                <span class="scroller-name">${name}</span>
-                <div class="scroller-detail">
-                    ${goal} 
-                    <span style="opacity:0.4; margin:0 4px">|</span> 
-                    ${edu}
-                </div>
-            </div>
-            <div style="text-align:right;display:flex;align-items:center">
-                <div style="font-size:0.75rem; color:#f4df11; margin-bottom:2px; font-weight:bold;">${dateStr}</div>
-                <span class="scroller-tag">${method}</span>
-            </div>
-        `;
-        return div;
-    }
+    //     div.innerHTML = `
+    //         <div class="scroller-info">
+    //             <span class="scroller-name">${name}</span>
+    //             <div class="scroller-detail">
+    //                 ${goal} 
+    //                 <span style="opacity:0.4; margin:0 4px">|</span> 
+    //                 ${edu}
+    //             </div>
+    //         </div>
+    //         <div style="text-align:right;display:flex;align-items:center">
+    //             <div style="font-size:0.75rem; color:#f4df11; margin-bottom:2px; font-weight:bold;">${dateStr}</div>
+    //             <span class="scroller-tag">${method}</span>
+    //         </div>
+    //     `;
+    //     return div;
+    // }
 
-    // 더미 데이터 스크롤러 아이템 생성
-    function createDummyScrollerItem() {
-        const name = lastNames[getRandomInt(lastNames.length)] + '**';
-        const goal = goals[getRandomInt(goals.length)];
-        const edu = educations[getRandomInt(educations.length)];
-        const method = methods[getRandomInt(methods.length)];
+    // // 더미 데이터 스크롤러 아이템 생성
+    // function createDummyScrollerItem() {
+    //     const name = lastNames[getRandomInt(lastNames.length)] + '**';
+    //     const goal = goals[getRandomInt(goals.length)];
+    //     const edu = educations[getRandomInt(educations.length)];
+    //     const method = methods[getRandomInt(methods.length)];
 
-        const div = document.createElement('div');
-        div.className = 'scroller-item';
+    //     const div = document.createElement('div');
+    //     div.className = 'scroller-item';
         
-        div.innerHTML = `
-            <div class="scroller-info">
-                <span class="scroller-name">${name}</span>
-                <div class="scroller-detail">
-                    ${goal} 
-                    <span style="opacity:0.4; margin:0 4px">|</span> 
-                    ${edu}
-                </div>
-            </div>
-            <div style="text-align:right;display:flex;align-items:center">
-                <div style="font-size:0.75rem; color:#f4df11; margin-bottom:2px; font-weight:bold;">${todayDateStr}</div>
-                <span class="scroller-tag">${method}</span>
-            </div>
-        `;
-        return div;
-    }
+    //     div.innerHTML = `
+    //         <div class="scroller-info">
+    //             <span class="scroller-name">${name}</span>
+    //             <div class="scroller-detail">
+    //                 ${goal} 
+    //                 <span style="opacity:0.4; margin:0 4px">|</span> 
+    //                 ${edu}
+    //             </div>
+    //         </div>
+    //         <div style="text-align:right;display:flex;align-items:center">
+    //             <div style="font-size:0.75rem; color:#f4df11; margin-bottom:2px; font-weight:bold;">${todayDateStr}</div>
+    //             <span class="scroller-tag">${method}</span>
+    //         </div>
+    //     `;
+    //     return div;
+    // }
 
-// 기존의 복잡한 initScroller 함수를 이걸로 교체하세요.
-function initScroller(realConsults = []) {
-    const scrollerTrack = document.querySelector('.scroller-track');
-    if (!scrollerTrack) return;
+// // 기존의 복잡한 initScroller 함수를 이걸로 교체하세요.
+// function initScroller(realConsults = []) {
+//     const scrollerTrack = document.querySelector('.scroller-track');
+//     if (!scrollerTrack) return;
 
-    scrollerTrack.innerHTML = '';
+//     scrollerTrack.innerHTML = '';
     
-    // 데이터가 하나도 없으면 메시지 표시
-    if (realConsults.length === 0) {
-        scrollerTrack.innerHTML = '<div class="scroller-item" style="justify-content:center;">아직 오늘의 첫 신청자가 되어보세요!</div>';
-        return;
-    }
+//     // 데이터가 하나도 없으면 메시지 표시
+//     if (realConsults.length === 0) {
+//         scrollerTrack.innerHTML = '<div class="scroller-item" style="justify-content:center;">아직 오늘의 첫 신청자가 되어보세요!</div>';
+//         return;
+//     }
 
-    // 실제 데이터만 표시
-    realConsults.forEach(consult => {
-        const item = createRealScrollerItem(consult); // 이 함수는 유지
-        scrollerTrack.appendChild(item);
-    });
+//     // 실제 데이터만 표시
+//     realConsults.forEach(consult => {
+//         const item = createRealScrollerItem(consult); // 이 함수는 유지
+//         scrollerTrack.appendChild(item);
+//     });
 
-    // 스크롤 효과를 위해 데이터가 적으면 복제 (선택사항)
-    if (realConsults.length > 0 && realConsults.length < 5) {
-         realConsults.forEach(consult => {
-            const clone = createRealScrollerItem(consult);
-            scrollerTrack.appendChild(clone);
-        });
-    }
-}
+//     // 스크롤 효과를 위해 데이터가 적으면 복제 (선택사항)
+//     if (realConsults.length > 0 && realConsults.length < 5) {
+//          realConsults.forEach(consult => {
+//             const clone = createRealScrollerItem(consult);
+//             scrollerTrack.appendChild(clone);
+//         });
+//     }
+// }
     // function initScroller(realConsults = []) {
     //     if (!scrollerTrack) return;
         
@@ -403,22 +403,22 @@ function initScroller(realConsults = []) {
     // }
 
     // 통계 데이터 업데이트 함수 (화면 갱신용)
-    function updateStatsDisplay(stats) {
-        if (!stats) return;
+    // function updateStatsDisplay(stats) {
+    //     if (!stats) return;
         
-        // 누적 신청 수
-        if (statNumbers[0]) {
-            statNumbers[0].textContent = stats.totalCount.toLocaleString() + '명';
-        }
-        // 금일 잔여 신청 수
-        if (statNumbers[2]) {
-            statNumbers[2].textContent = stats.remainingToday + '명';
-        }
-        // 스크롤러 업데이트
-        if (stats.todayConsults) {
-            initScroller(stats.todayConsults);
-        }
-    }
+    //     // 누적 신청 수
+    //     if (statNumbers[0]) {
+    //         statNumbers[0].textContent = stats.totalCount.toLocaleString() + '명';
+    //     }
+    //     // 금일 잔여 신청 수
+    //     if (statNumbers[2]) {
+    //         statNumbers[2].textContent = stats.remainingToday + '명';
+    //     }
+    //     // 스크롤러 업데이트
+    //     if (stats.todayConsults) {
+    //         initScroller(stats.todayConsults);
+    //     }
+    // }
 
     // 30초마다 자동 갱신 (다른 사용자 신청도 반영)
     // setInterval(async () => {
@@ -539,10 +539,10 @@ function initScroller(realConsults = []) {
                     // 폼 초기화
                     consultForm.reset();
                     
-                    // 통계 및 스크롤러 새로고침
-                    loadRealStats().then(stats => {
-                        updateStatsDisplay(stats);
-                    });
+                    // // 통계 및 스크롤러 새로고침
+                    // loadRealStats().then(stats => {
+                    //     updateStatsDisplay(stats);
+                    // });
                 } else {
                     alert(result.error || '상담 신청에 실패했습니다. 다시 시도해주세요.');
                 }

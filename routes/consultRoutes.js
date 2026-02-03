@@ -3,7 +3,7 @@ const router = express.Router();
 const consultController = require('../controllers/consultController');
 
 // GET    /api/consult/stats    - 통계 조회 (누적, 오늘 신청 수)
-router.get('/stats', consultController.getStats);
+// router.get('/stats', consultController.getStats);
 
 // POST   /api/consult           - 상담 신청 생성
 router.post('/', consultController.createConsult);
