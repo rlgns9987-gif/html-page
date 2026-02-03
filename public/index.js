@@ -164,11 +164,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     targetValue = realStats.totalCount;
                     suffix = '명';
                 } else if (index === 1) {
-                    targetValue = 30;
+                    targetValue = 20;
                     suffix = '명';
                 } else if (index === 2) { // 금일 잔여 신청 수
                     // targetValue = realStats.remainingToday;
-                    targetValue = realStats.remainingToday - 13;
+                    targetValue = realStats.remainingToday;
                     suffix = '명';
                 } else {
                     targetValue = 98;
@@ -338,42 +338,69 @@ document.addEventListener('DOMContentLoaded', function() {
         return div;
     }
 
-    function initScroller(realConsults = []) {
-        if (!scrollerTrack) return;
-        
-        // 페이드 아웃
-        scrollerTrack.style.opacity = '0';
-        scrollerTrack.innerHTML = '';
+// 기존의 복잡한 initScroller 함수를 이걸로 교체하세요.
+function initScroller(realConsults = []) {
+    const scrollerTrack = document.querySelector('.scroller-track');
+    if (!scrollerTrack) return;
 
-        const items = [];
-        
-        // 1. 실제 오늘 신청자 데이터 먼저 추가
-        realConsults.forEach(consult => {
-            const item = createRealScrollerItem(consult);
-            items.push(item);
-            scrollerTrack.appendChild(item);
-        });
+    scrollerTrack.innerHTML = '';
+    
+    // 데이터가 하나도 없으면 메시지 표시
+    if (realConsults.length === 0) {
+        scrollerTrack.innerHTML = '<div class="scroller-item" style="justify-content:center;">아직 오늘의 첫 신청자가 되어보세요!</div>';
+        return;
+    }
 
-        // 2. 나머지는 더미 데이터로 채움 (최소 8개 유지)
-        const dummyCount = Math.max(0, 8 - realConsults.length);
-        for (let i = 0; i < dummyCount; i++) {
-            const item = createDummyScrollerItem();
-            items.push(item);
-            scrollerTrack.appendChild(item);
-        }
+    // 실제 데이터만 표시
+    realConsults.forEach(consult => {
+        const item = createRealScrollerItem(consult); // 이 함수는 유지
+        scrollerTrack.appendChild(item);
+    });
 
-        // 3. 무한 스크롤을 위해 복제
-        items.forEach(item => {
-            const clone = item.cloneNode(true);
+    // 스크롤 효과를 위해 데이터가 적으면 복제 (선택사항)
+    if (realConsults.length > 0 && realConsults.length < 5) {
+         realConsults.forEach(consult => {
+            const clone = createRealScrollerItem(consult);
             scrollerTrack.appendChild(clone);
         });
-        
-        // 페이드 인 (약간의 딜레이 후)
-        setTimeout(() => {
-            scrollerTrack.style.transition = 'opacity 0.3s ease';
-            scrollerTrack.style.opacity = '1';
-        }, 50);
     }
+}
+    // function initScroller(realConsults = []) {
+    //     if (!scrollerTrack) return;
+        
+    //     // 페이드 아웃
+    //     scrollerTrack.style.opacity = '0';
+    //     scrollerTrack.innerHTML = '';
+
+    //     const items = [];
+        
+    //     // 1. 실제 오늘 신청자 데이터 먼저 추가
+    //     realConsults.forEach(consult => {
+    //         const item = createRealScrollerItem(consult);
+    //         items.push(item);
+    //         scrollerTrack.appendChild(item);
+    //     });
+
+    //     // 2. 나머지는 더미 데이터로 채움 (최소 8개 유지)
+    //     const dummyCount = Math.max(0, 8 - realConsults.length);
+    //     for (let i = 0; i < dummyCount; i++) {
+    //         const item = createDummyScrollerItem();
+    //         items.push(item);
+    //         scrollerTrack.appendChild(item);
+    //     }
+
+    //     // 3. 무한 스크롤을 위해 복제
+    //     items.forEach(item => {
+    //         const clone = item.cloneNode(true);
+    //         scrollerTrack.appendChild(clone);
+    //     });
+        
+    //     // 페이드 인 (약간의 딜레이 후)
+    //     setTimeout(() => {
+    //         scrollerTrack.style.transition = 'opacity 0.3s ease';
+    //         scrollerTrack.style.opacity = '1';
+    //     }, 50);
+    // }
 
     // 통계 데이터 업데이트 함수 (화면 갱신용)
     function updateStatsDisplay(stats) {
@@ -385,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // 금일 잔여 신청 수
         if (statNumbers[2]) {
-            statNumbers[2].textContent = stats.remainingToday - 13 + '명';
+            statNumbers[2].textContent = stats.remainingToday + '명';
         }
         // 스크롤러 업데이트
         if (stats.todayConsults) {
