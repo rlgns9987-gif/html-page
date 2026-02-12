@@ -1,5 +1,2 @@
 User-agent: *
-Allow: /
-Disallow: /admin
-
-Sitemap: https://xn--hu1b9hk0npon.com/sitemap.xml
+Disallow: /
