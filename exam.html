@@ -118,11 +118,26 @@ let allQuestions = []; // 전체 문제 저장용
         const optionsArea = document.getElementById('options-area');
         optionsArea.innerHTML = '';
 
-        q.options.forEach((opt, i) => {
+        // [수정 포인트] 보기(options)와 정답 인덱스(answer)를 연결한 객체 배열 생성
+        let mappedOptions = q.options.map((opt, index) => {
+            return { text: opt, isCorrect: index === q.answer };
+        });
+
+        // [수정 포인트] 보기 순서를 무작위로 섞기
+        mappedOptions.sort(() => Math.random() - 0.5);
+
+        // 섞인 보기를 화면에 출력
+        mappedOptions.forEach((optObj, i) => {
             const btn = document.createElement('button');
+            // 선택 상태 유지 로직 (필요 시 수정)
             btn.className = `opt-btn ${userAnswers[currentIdx] === i ? 'selected' : ''}`;
-            btn.innerText = `${i + 1}. ${opt}`;
-            btn.onclick = () => selectOption(i);
+            btn.innerText = `${i + 1}. ${optObj.text}`;
+            
+            // 클릭 시 정답 여부 체크를 위해 optObj.isCorrect를 활용하거나 새 인덱스 저장
+            btn.onclick = () => {
+                // 사용자가 선택한 이 버튼의 '실제 정답 여부'를 저장하는 로직으로 변경 필요
+                selectOption(i, optObj.isCorrect); 
+            };
             optionsArea.appendChild(btn);
         });
 
