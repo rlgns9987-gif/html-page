@@ -156,27 +156,37 @@
         document.getElementById('result-screen').style.display = 'block';
         let score = 0;
         const wrongList = document.getElementById('wrong-list');
-        wrongList.innerHTML = '';
+        wrongList.innerHTML = ''; // 리스트 초기화
 
         examData.forEach((q, i) => {
-            if (userAnswers[i] === q.answer) {
-                score++;
-            } else {
-                const div = document.createElement('div');
-                div.className = 'wrong-item';
-                div.innerHTML = `
-                    <strong>Q${i + 1}. ${q.q}</strong><br>
-                    <span style="color:red">선택: ${userAnswers[i] !== null ? q.options[userAnswers[i]] : '미답변'}</span> / 
-                    <span style="color:blue">정답: ${q.options[q.answer]}</span>
-                    <div class="explanation">💡 해설: ${q.ext}</div>
-                `;
-                wrongList.appendChild(div);
-            }
+            const isCorrect = userAnswers[i] === q.answer;
+            if (isCorrect) score++;
+
+            // 결과 항목 생성
+            const div = document.createElement('div');
+            div.className = 'wrong-item';
+            
+            // 맞았는지 틀렸는지에 따라 아이콘과 색상 결정
+            const statusIcon = isCorrect ? '<span style="color:#27ae60">✅ 정답</span>' : '<span style="color:#e74c3c">❌ 오답</span>';
+            const userChoice = userAnswers[i] !== null ? q.options[userAnswers[i]] : '미답변';
+            const correctAnswer = q.options[q.answer];
+
+            div.innerHTML = `
+                <div style="margin-bottom: 5px;">${statusIcon} <strong>Q${i + 1}. ${q.q}</strong></div>
+                <div style="font-size: 0.95em; margin-left: 20px;">
+                    <span style="color:${isCorrect ? '#27ae60' : '#e74c3c'}">내 선택: ${userChoice}</span><br>
+                    <span style="color:#3498db">정답: ${correctAnswer}</span>
+                </div>
+                <div class="explanation">💡 해설: ${q.ext}</div>
+            `;
+            wrongList.appendChild(div);
         });
 
         const finalScore = Math.round((score / 80) * 1000);
         document.getElementById('final-score').innerText = `${finalScore}점`;
-        document.getElementById('score-comment').innerText = finalScore >= 600 ? "축하합니다! 합격권입니다." : "조금 더 복습해 보세요.";
+        
+        let comment = finalScore >= 600 ? "축하합니다! 합격권입니다." : "위드에듀 자료로 조금 더 복습해 보세요.";
+        document.getElementById('score-comment').innerText = comment;
     }
 
     window.onload = loadDataAndInit;
