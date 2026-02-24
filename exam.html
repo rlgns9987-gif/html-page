@@ -33,7 +33,7 @@
 <div class="container" id="quiz-screen">
     <div class="header">
         <div><strong>실전 모의고사</strong> (80문항)</div>
-        <div class="timer" id="timer">80:00</div>
+        <div class="timer" id="timer">90:00</div>
     </div>
     <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
     <div id="quiz-area">
@@ -63,7 +63,7 @@
     let examData = [];     // 보기가 이미 섞인 상태로 저장될 80문제
     let userAnswers = new Array(80).fill(null);
     let currentIdx = 0;
-    let timeLeft = 80 * 60;
+    let timeLeft = 90 * 60;
 
     async function loadDataAndInit() {
         try {
